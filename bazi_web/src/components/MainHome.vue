@@ -74,6 +74,48 @@
             </div>
           </div>
         </div>
+
+        <!-- 新增视频播放组件 -->
+        <div class="video-container">
+          <video
+              ref="videoPlayer"
+              :poster="videoPoster"
+              muted
+              playsinline
+              @play="onVideoPlay"
+              @pause="onVideoPause"
+              @loadedmetadata="onVideoLoaded"
+              @canplay="onVideoCanPlay"
+          >
+            <source :src="videoSource" type="video/mp4">
+            您的浏览器不支持视频播放。
+          </video>
+
+          <!-- 新增：视频画面内的播放按钮 -->
+          <div class="video-play-overlay">
+            <button @click="togglePlay" class="play-btn-overlay">
+              <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
+            </button>
+          </div>
+
+          <!-- 自定义控制栏 -->
+          <div class="custom-controls">
+            <div class="volume-control">
+              <button @click="toggleMute" class="control-btn">
+                <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
+              </button>
+              <input
+                  type="range"
+                  min="0" max="1" step="0.1"
+                  v-model="volume"
+                  @input="setVolume"
+                  class="volume-slider"
+              >
+            </div>
+
+          </div>
+        </div>
+
       </div>
       <!-- Mac版页面 -->
       <div v-if="currentPage === 'mac'" class="mac-page">
@@ -92,7 +134,7 @@
 
           <!-- 白色虚线按钮（App Store版） -->
           <div class="download-button outline app-store">
-            <img src="/icons/mac_download_enter.png" alt="App Store" class="button-icon"/>
+            <img src="/icons/mac_store.png" alt="App Store" class="button-icon"/>
             <div class="button-text">
               <span>Mac App Store</span>
               <span class="version">1.1.0</span>
@@ -106,13 +148,11 @@
 
 <script setup>
 // 修复：添加响应式状态管理
-import {ref} from 'vue';
+import {ref, onMounted, onBeforeUnmount} from 'vue';
 
 // 当前激活的语言状态
 const activeLang = ref('simplified'); // 默认简体
 const currentPage = ref('home'); // 默认显示首页
-
-
 // 语言切换方法
 const setActiveLang = (lang) => {
   activeLang.value = lang; // 更新激活状态
@@ -127,6 +167,115 @@ const platforms = [
   {name: "MacOS", icon: "/icons/macos.png"},
   {name: "Windows", icon: "/icons/windows.png"}
 ];
+
+
+
+// 新增视频相关状态
+const videoPlayer = ref(null);
+const videoSource = ref('/videos/01-周易大学-静心面相.mp4'); // 假视频地址
+const videoPoster = ref('/images/video-poster.jpg'); // 视频封面图
+const videoLoaded = ref(false);
+const videoCanPlay = ref(false);
+
+// 新增视频控制状态
+const isPlaying = ref(false);
+const isMuted = ref(true); // 初始静音避免自动播放被阻止
+const volume = ref(0.5); // 默认音量50%
+
+
+// 播放/暂停切换
+const togglePlay = () => {
+  if (videoPlayer.value.paused) {
+    videoPlayer.value.play();
+    isPlaying.value = true;
+  } else {
+    videoPlayer.value.pause();
+    isPlaying.value = false;
+  }
+};
+// 静音切换
+const toggleMute = () => {
+  videoPlayer.value.muted = !videoPlayer.value.muted;
+  isMuted.value = videoPlayer.value.muted;
+};
+
+// 音量设置
+const setVolume = () => {
+  videoPlayer.value.volume = volume.value;
+  videoPlayer.value.muted = (volume.value === 0);
+  isMuted.value = (volume.value === 0);
+};
+// 视频加载完成回调
+const onVideoLoaded = () => {
+  videoLoaded.value = true;
+  checkVideoPlayback();
+};
+
+// 视频可以播放回调
+const onVideoCanPlay = () => {
+  videoCanPlay.value = true;
+  checkVideoPlayback();
+};
+
+// 检查是否应该播放视频
+const checkVideoPlayback = () => {
+  if (!videoPlayer.value || !videoLoaded.value || !videoCanPlay.value) return;
+
+  const videoRect = videoPlayer.value.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+
+  // 当视频顶部进入视口时播放（距离视口顶部小于视口高度）
+  if (videoRect.top < viewportHeight) {
+    videoPlayer.value.play().catch(error => {
+      console.log('自动播放被阻止:', error);
+    });
+  }
+};
+const setupVideoEventListeners = () => {
+  const video = videoPlayer.value;
+  if (!video) return;
+
+  // 视频播放时更新按钮状态
+  video.addEventListener('play', () => {
+    isPlaying.value = true;
+  });
+
+  // 视频暂停时更新按钮状态
+  video.addEventListener('pause', () => {
+    isPlaying.value = false;
+  });
+
+  // 视频结束时更新按钮状态
+  video.addEventListener('ended', () => {
+    isPlaying.value = false;
+  });
+};
+// 滚动事件处理
+const handleScroll = () => {
+  if (currentPage.value === 'home' && videoPlayer.value) {
+    checkVideoPlayback();
+  }
+};
+
+// 生命周期钩子
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  setupVideoEventListeners(); // 新增事件监听
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+
+  // 新增：移除视频事件监听
+  const video = videoPlayer.value;
+  if (video) {
+    video.removeEventListener('play', () => {});
+    video.removeEventListener('pause', () => {});
+    video.removeEventListener('ended', () => {});
+  }
+});
+
+
 
 
 </script>
@@ -280,16 +429,17 @@ const platforms = [
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 核心垂直居中 */
-  height: 100%;
+  justify-content: flex-start; /* 核心垂直居中 */
+  min-height: 100vh;
   width: 100%;
   position: relative;
+  padding-top: 40px; /* 顶部内边距 */
 }
 /* 平台按钮区域 */
 .platform-buttons {
   display: flex;
   gap: 30px;
-  margin-top: 200px; /* 保持与标题的距离 */
+  margin-top: 60px; /* 保持与标题的距离 */
 }
 
 
@@ -347,7 +497,9 @@ const platforms = [
   height: 32px;
   margin-bottom: 6px;
 }
-
+.download-button.outline:not(.app-store):hover .button-text span {
+  color: #4CAF50;
+}
 .download-text {
   font-family: 'Microsoft YaHei', sans-serif; /* 新增字体设置 */
   color: white;
@@ -429,11 +581,11 @@ const platforms = [
 }
 
 .mac-title {
-  font-size: 36px;
+  font-size: 48px;
   font-weight: bold;
-  margin-bottom: 60px;
-  letter-spacing: 1px;
-  color: #000;
+  letter-spacing: 2px;
+  color: #000000;
+  margin-bottom: 200px; /* 统一为200px */
   text-align: center;
 }
 
@@ -443,7 +595,7 @@ const platforms = [
   flex-direction: row; /* 水平排列 */
   justify-content: center; /* 水平居中 */
   gap: 25px; /* 按钮间距 */
-  max-width: 500px; /* 扩展最大宽度 */
+  max-width: 460px; /* 扩展最大宽度 */
   width: 100%;
   align-items: stretch; /* 确保高度一致 */
 }
@@ -472,8 +624,8 @@ const platforms = [
 
 /* 按钮图标 */
 .button-icon {
-  width: 24px;
-  height: 24px;
+  width: 45px;
+  height: 45px;
   margin-right: 15px;
 }
 
@@ -497,4 +649,89 @@ const platforms = [
   opacity: 0.7;
   font-weight: normal;
 }
+
+
+
+/* 视频容器样式 */
+
+.video-container {
+  position: relative;
+}
+
+.video-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 60px auto 0;
+  aspect-ratio: 16/9; /* 保持16:9宽高比 */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #f0f0f0;
+}
+.video-play-overlay {
+  position: absolute;
+  bottom: 15px;     /* 距离画面底部15px */
+  right: 15px;      /* 距离画面右侧15px */
+  z-index: 20;      /* 确保在视频和控制栏上方 */
+}
+/* 播放按钮样式 */
+.play-btn-overlay {
+  background: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  width: 46px;      /* 按钮区域宽度 */
+  height: 46px;     /* 按钮区域高度 */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.play-btn-overlay img {
+  width: 100%;      /* 宽度100%填充容器 */
+  height: 100%;     /* 高度100%填充容器 */
+  object-fit: contain; /* 等比例缩放并完整显示 */
+}
+/* 自定义控制栏样式 */
+.custom-controls {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 30px); /* 减去左右边距 */
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.control-btn img {
+  width: 24px;
+  height: 24px;
+  filter: invert(1); /* 白色图标 */
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  accent-color: white; /* 滑块轨道颜色 */
+}
+
+
+
+
 </style>
