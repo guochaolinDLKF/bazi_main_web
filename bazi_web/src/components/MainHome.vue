@@ -16,11 +16,11 @@
            :class="{ active: currentPage === 'home' }"
            @click="currentPage = 'home'"
        >首页</span>
-        <span
+        <!--<span
             class="nav-item"
             :class="{ active: currentPage === 'mac' }"
             @click="currentPage = 'mac'"
-        >Mac</span>
+        >Mac</span>-->
       </div>
 
 
@@ -54,8 +54,9 @@
               :class="{
             'android-btn': platform.name === 'Android',
             'windows-btn': platform.name === 'Windows',
-            'ios-btn': platform.name === 'iOS'
+            'ios-btn': platform.name === 'iOS',
           }"
+              @click="handleDownload(platform)"
           >
             <!-- 默认显示内容 -->
             <div class="original-content">
@@ -76,48 +77,48 @@
         </div>
 
         <!-- 新增视频播放组件 -->
-        <div class="video-container">
-          <video
-              ref="videoPlayer"
-              :poster="videoPoster"
-              muted
-              playsinline
-              @play="onVideoPlay"
-              @pause="onVideoPause"
-              @loadedmetadata="onVideoLoaded"
-              @canplay="onVideoCanPlay"
-          >
-            <source :src="videoSource" type="video/mp4">
-            您的浏览器不支持视频播放。
-          </video>
+        <!--  <div class="video-container">
+            <video
+                ref="videoPlayer"
+                :poster="videoPoster"
+                muted
+                playsinline
+                @play="onVideoPlay"
+                @pause="onVideoPause"
+                @loadedmetadata="onVideoLoaded"
+                @canplay="onVideoCanPlay"
+            >
+              <source :src="videoSource" type="video/mp4">
+              您的浏览器不支持视频播放。
+            </video>-->
 
-          <!-- 新增：视频画面内的播放按钮 -->
-          <div class="video-play-overlay">
-            <button @click="togglePlay" class="play-btn-overlay">
-              <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
-            </button>
-          </div>
+            <!-- 新增：视频画面内的播放按钮 -->
+        <!--  <div class="video-play-overlay">
+           <button @click="togglePlay" class="play-btn-overlay">
+             <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
+           </button>
+         </div> -->
 
-          <!-- 自定义控制栏 -->
-          <div class="custom-controls">
-            <div class="volume-control">
-              <button @click="toggleMute" class="control-btn">
-                <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
-              </button>
-              <input
-                  type="range"
-                  min="0" max="1" step="0.1"
-                  v-model="volume"
-                  @input="setVolume"
-                  class="volume-slider"
-              >
-            </div>
+         <!-- 自定义控制栏 -->
+        <!-- <div class="custom-controls">
+           <div class="volume-control">
+             <button @click="toggleMute" class="control-btn">
+               <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
+             </button>
+             <input
+                 type="range"
+                 min="0" max="1" step="0.1"
+                 v-model="volume"
+                 @input="setVolume"
+                 class="volume-slider"
+             >
+           </div>
 
-          </div>
-        </div>
+         </div>
+       </div>-->
 
-      </div>
-      <!-- Mac版页面 -->
+     </div>
+     <!-- Mac版页面 -->
       <div v-if="currentPage === 'mac'" class="mac-page">
         <div class="mac-title">八字玄机MacOS版</div>
 
@@ -148,8 +149,8 @@
 
 <script setup>
 // 修复：添加响应式状态管理
-import {ref, onMounted, onBeforeUnmount} from 'vue';
-
+import {ref, onMounted, onBeforeUnmount,reactive} from 'vue';
+import { AppService } from './AppService';
 // 当前激活的语言状态
 const activeLang = ref('simplified'); // 默认简体
 const currentPage = ref('home'); // 默认显示首页
@@ -158,18 +159,68 @@ const setActiveLang = (lang) => {
   activeLang.value = lang; // 更新激活状态
   console.log(lang);
 };
+// 生命周期钩子
+onMounted(async () => {
+  window.addEventListener('scroll', handleScroll);
+  setupVideoEventListeners(); // 新增事件监听
 
+  await requestAndroidCfg();
+  await requestWindowsCfg();
+});
 // 平台按钮数据 - 使用假路径
-const platforms = [
-  {name: "Android", icon: "/icons/android.png"},
-  {name: "HarmonyOS", icon: "/icons/harmonyos.png"},
-  {name: "iOS", icon: "/icons/ios.png"},
-  {name: "MacOS", icon: "/icons/macos.png"},
-  {name: "Windows", icon: "/icons/windows.png"}
-];
+const platforms = reactive([
+  {
+    name: "Android",
+    icon: "/icons/android.png",
+    link: "https://default-android.com"
+  },
+  {
+    name: "Windows",
+    icon: "/icons/windows.png",
+    link: "https://default-windows.com"
+  }
+]);
+const requestAndroidCfg= async ()=>{
+  try {
+    const response = await AppService.cfgRequest(
+        `http://localhost:80/cfg/Android/Debug/buildList.json`);
+    // 这里可以处理返回的数据（如存储到响应式变量中）
+    console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
+    updatePlatformLink("Android",
+        "http://43.143.225.203:8960/Android"+"/"+
+        response.curVersionInfo.buildEnv+"/"+response.curVersionInfo.buildVersion+"/"+
+        response.curVersionInfo.fileList[0].fileName)
+  } catch (error) {
+    console.error('在MainHome中捕获到错误:', error);
+    // 这里可以添加错误处理逻辑（如显示错误提示）
+  }
+};
+const requestWindowsCfg= async ()=>{
+  try {
+    const response = await AppService.cfgRequest(
+        `http://localhost:80/cfg/Windows/Debug/buildList.json`);
+    // 这里可以处理返回的数据（如存储到响应式变量中）
+    console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
-
+    updatePlatformLink("Windows",
+        "http://43.143.225.203:8960/Windows"+"/"+
+        response.curVersionInfo.buildEnv+"/"+response.curVersionInfo.buildVersion+"/"+
+        response.curVersionInfo.fileList[0].fileName)
+  } catch (error) {
+    console.error('在MainHome中捕获到错误:', error);
+    // 这里可以添加错误处理逻辑（如显示错误提示）
+  }
+};
+const updatePlatformLink = (platformName, newLink) => {
+  const platform = platforms.find(p => p.name === platformName);
+  if (platform) {
+    platform.link = newLink; // 直接修改属性
+  }
+};
+const handleDownload = (platform) => {
+  window.open(platform.link, '_blank');
+};
 // 新增视频相关状态
 const videoPlayer = ref(null);
 const videoSource = ref('/videos/01-周易大学-静心面相.mp4'); // 假视频地址
@@ -257,11 +308,7 @@ const handleScroll = () => {
   }
 };
 
-// 生命周期钩子
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-  setupVideoEventListeners(); // 新增事件监听
-});
+
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll);
@@ -289,6 +336,7 @@ onBeforeUnmount(() => {
 }
 
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -424,22 +472,20 @@ onBeforeUnmount(() => {
   font-weight: bold;
   letter-spacing: 2px;
   color: #000000;
+  margin-bottom: 40px;
 }
 .home-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 核心垂直居中 */
-  min-height: 100vh;
+  justify-content: center; /* 核心垂直居中 */
   width: 100%;
   position: relative;
-  padding-top: 40px; /* 顶部内边距 */
 }
 /* 平台按钮区域 */
 .platform-buttons {
   display: flex;
   gap: 30px;
-  margin-top: 60px; /* 保持与标题的距离 */
 }
 
 
@@ -656,6 +702,7 @@ onBeforeUnmount(() => {
 
 .video-container {
   position: relative;
+  top: 1080px;
 }
 
 .video-container {
