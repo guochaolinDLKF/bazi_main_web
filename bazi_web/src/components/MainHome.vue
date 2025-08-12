@@ -41,116 +41,130 @@
       </div>
     </header>
 
-    <!-- 主体内容区域 -->
-    <main class="main-content">
-      <div v-if="currentPage === 'home'" class="home-page">
-
-        <div class="main-title">八字玄机</div>
-        <div class="platform-buttons">
-          <div
-              v-for="(platform, index) in platforms"
-              :key="index"
-              class="button"
-              :class="{
+      <!-- 主体内容区域 -->
+      <main class="main-content">
+        <div v-if="currentPage === 'home'" class="home-page">
+          <div class="content-wrapper">
+          <div class="main-title">八字玄机</div>
+          </div>
+          <div class="button-container">
+            <div class="platform-buttons">
+              <div
+                  v-for="(platform, index) in platforms"
+                  :key="index"
+                  class="button"
+                  @click.stop="handleClick(platform, $event)"
+                  @mouseover="setHoverState(platform.id, true)"
+                  @mouseleave="setHoverState(platform.id, false)"
+                  :class="{
             'android-btn': platform.name === 'Android',
             'windows-btn': platform.name === 'Windows',
             'ios-btn': platform.name === 'iOS',
+            'harmonyos-btn': platform.name === 'HarmonyOS',
+            'macos-btn': platform.name === 'MacOS'
           }"
-              @click="handleDownload(platform)"
-          >
-            <!-- 默认显示内容 -->
-            <div class="original-content">
-              <img :src="platform.icon" :alt="platform.name" class="icon"/>
-              <span>{{ platform.name }}</span>
-            </div>
-
-            <!-- 鼠标悬停时显示的内容（仅Android和Windows按钮） -->
-            <div class="download-overlay">
-              <img src="/icons/download.png" alt="下载" class="download-icon"/>
-              <span class="download-text">立刻下载</span>
-            </div>
-            <!-- 二维码覆盖层 -->
-            <div class="qr-overlay">
-              <img src="/icons/ios-qr.png" alt="iOS下载二维码" class="qr-image"/>
+              >
+                <!-- 默认显示内容 -->
+                <div class="original-content" v-show="!hoverStates[platform.id]">
+                  <img :src="platform.icon" :alt="platform.name" class="icon"/>
+                  <span>{{ platform.name }}</span>
+                </div>
+                <!-- 悬停时显示的研发提示 -->
+                <div class="dev-message" v-show="hoverStates[platform.id]">
+                  正在研发中
+                </div>
+                <!-- 鼠标悬停时显示的内容（仅Android和Windows按钮） -->
+                <div class="download-overlay">
+                  <img src="/icons/download.png" alt="下载" class="download-icon"/>
+                  <span class="download-text">立即下载</span>
+                </div>
+                <!-- 二维码覆盖层 -->
+                <div class="qr-overlay">
+                  <img src="/icons/ios-qr.png" alt="iOS下载二维码" class="qr-image"/>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+          <!-- 新增视频播放组件 -->
+          <!--  <div class="video-container">
+              <video
+                  ref="videoPlayer"
+                  :poster="videoPoster"
+                  muted
+                  playsinline
+                  @play="onVideoPlay"
+                  @pause="onVideoPause"
+                  @loadedmetadata="onVideoLoaded"
+                  @canplay="onVideoCanPlay"
+              >
+                <source :src="videoSource" type="video/mp4">
+                您的浏览器不支持视频播放。
+              </video>-->
 
-        <!-- 新增视频播放组件 -->
-        <!--  <div class="video-container">
-            <video
-                ref="videoPlayer"
-                :poster="videoPoster"
-                muted
-                playsinline
-                @play="onVideoPlay"
-                @pause="onVideoPause"
-                @loadedmetadata="onVideoLoaded"
-                @canplay="onVideoCanPlay"
-            >
-              <source :src="videoSource" type="video/mp4">
-              您的浏览器不支持视频播放。
-            </video>-->
-
-            <!-- 新增：视频画面内的播放按钮 -->
-        <!--  <div class="video-play-overlay">
-           <button @click="togglePlay" class="play-btn-overlay">
-             <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
-           </button>
-         </div> -->
-
-         <!-- 自定义控制栏 -->
-        <!-- <div class="custom-controls">
-           <div class="volume-control">
-             <button @click="toggleMute" class="control-btn">
-               <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
+          <!-- 新增：视频画面内的播放按钮 -->
+          <!--  <div class="video-play-overlay">
+             <button @click="togglePlay" class="play-btn-overlay">
+               <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
              </button>
-             <input
-                 type="range"
-                 min="0" max="1" step="0.1"
-                 v-model="volume"
-                 @input="setVolume"
-                 class="volume-slider"
-             >
+           </div> -->
+
+          <!-- 自定义控制栏 -->
+          <!-- <div class="custom-controls">
+             <div class="volume-control">
+               <button @click="toggleMute" class="control-btn">
+                 <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
+               </button>
+               <input
+                   type="range"
+                   min="0" max="1" step="0.1"
+                   v-model="volume"
+                   @input="setVolume"
+                   class="volume-slider"
+               >
+             </div>
+
            </div>
+         </div>-->
 
-         </div>
-       </div>-->
+        </div>
 
-     </div>
-     <!-- Mac版页面 -->
-      <div v-if="currentPage === 'mac'" class="mac-page">
-        <div class="mac-title">八字玄机MacOS版</div>
+        <!-- Mac版页面 -->
+        <div v-if="currentPage === 'mac'" class="mac-page">
+          <div class="mac-title">八字玄机MacOS版</div>
 
-        <!-- 下载按钮组 -->
-        <div class="download-buttons">
-          <!-- 白色虚线按钮 -->
-          <div class="download-button outline">
-            <img src="/icons/mac_download_normal.png" alt="下载" class="button-icon"/>
-            <div class="button-text">
-              <span>立即下载</span>
-              <span class="version">1.1.0</span>
+          <!-- 下载按钮组 -->
+          <div class="download-buttons">
+            <!-- 白色虚线按钮 -->
+            <div class="download-button outline">
+              <img src="/icons/mac_download_normal.png" alt="下载" class="button-icon"/>
+              <div class="button-text">
+                <span>立即下载</span>
+                <span class="version">1.1.0</span>
+              </div>
             </div>
-          </div>
 
-          <!-- 白色虚线按钮（App Store版） -->
-          <div class="download-button outline app-store">
-            <img src="/icons/mac_store.png" alt="App Store" class="button-icon"/>
-            <div class="button-text">
-              <span>Mac App Store</span>
-              <span class="version">1.1.0</span>
+            <!-- 白色虚线按钮（App Store版） -->
+            <div class="download-button outline app-store">
+              <img src="/icons/mac_store.png" alt="App Store" class="button-icon"/>
+              <div class="button-text">
+                <span>Mac App Store</span>
+                <span class="version">1.1.0</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
+      </main>
+
+    </div>
+  <div class="bottom-green-area"></div>
 </template>
 
 <script setup>
 // 修复：添加响应式状态管理
-import {ref, onMounted, onBeforeUnmount,reactive} from 'vue';
-import { AppService } from './AppService';
+import {ref, onMounted, onBeforeUnmount, reactive} from 'vue';
+import { convertDOM } from './../zhConverter';
+import {AppService} from './AppService';
+
 // 当前激活的语言状态
 const activeLang = ref('simplified'); // 默认简体
 const currentPage = ref('home'); // 默认显示首页
@@ -158,11 +172,15 @@ const currentPage = ref('home'); // 默认显示首页
 const setActiveLang = (lang) => {
   activeLang.value = lang; // 更新激活状态
   console.log(lang);
+  convertDOM(lang === 'traditional');
 };
 // 生命周期钩子
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
   setupVideoEventListeners(); // 新增事件监听
+  if (activeLang.value === 'traditional') {
+    convertDOM(true);
+  }
 
   await requestAndroidCfg();
   await requestWindowsCfg();
@@ -171,41 +189,63 @@ onMounted(async () => {
 const platforms = reactive([
   {
     name: "Android",
+    id: "android",
     icon: "/icons/android.png",
     link: "https://default-android.com"
-  },
+  }
+  ,
   {
     name: "Windows",
+    id: "windows",
     icon: "/icons/windows.png",
     link: "https://default-windows.com"
   }
+  ,
+  {
+    name: "HarmonyOS",
+    id: "harmony",
+    icon: "/icons/harmonyos.png",
+    link: "https://default-harmonyos.com"
+  },
+  {
+    name: "iOS",
+    id: "ios",
+    icon: "/icons/ios.png",
+    link: "https://default-harmonyos.com"
+  },
+  {
+    name: "MacOS",
+    id: "mac",
+    icon: "/icons/macos.png",
+    link: "https://default-macos.com"
+  }
 ]);
-const requestAndroidCfg= async ()=>{
+const requestAndroidCfg = async () => {
   try {
     const response = await AppService.cfgRequest(
-        `http://localhost:80/cfg/Android/Debug/buildList.json`);
+        `http://43.143.225.203:8911/cfg/Android/Debug/buildList.json`);
     // 这里可以处理返回的数据（如存储到响应式变量中）
     console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
     updatePlatformLink("Android",
-        "http://43.143.225.203:8960/Android"+"/"+
-        response.curVersionInfo.buildEnv+"/"+response.curVersionInfo.buildVersion+"/"+
+        "http://43.143.225.203:8911/cfg/Android" + "/" +
+        response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
     // 这里可以添加错误处理逻辑（如显示错误提示）
   }
 };
-const requestWindowsCfg= async ()=>{
+const requestWindowsCfg = async () => {
   try {
     const response = await AppService.cfgRequest(
-        `http://localhost:80/cfg/Windows/Debug/buildList.json`);
+        `http://43.143.225.203:8911/cfg/Windows/Debug/buildList.json`);
     // 这里可以处理返回的数据（如存储到响应式变量中）
     console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
     updatePlatformLink("Windows",
-        "http://43.143.225.203:8960/Windows"+"/"+
-        response.curVersionInfo.buildEnv+"/"+response.curVersionInfo.buildVersion+"/"+
+        "http://43.143.225.203:8911/cfg/Windows" + "/" +
+        response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
@@ -218,9 +258,16 @@ const updatePlatformLink = (platformName, newLink) => {
     platform.link = newLink; // 直接修改属性
   }
 };
-const handleDownload = (platform) => {
+const handleClick = (platform, event) => {
+  // 阻止HarmonyOS/iOS/MacOS的链接跳转
+  if (['HarmonyOS', 'iOS', 'MacOS'].includes(platform.name)) {
+    event.preventDefault(); // 阻止默认行为
+    return; // 不执行后续逻辑
+  }
+
+  // 其他平台正常跳转
   window.open(platform.link, '_blank');
-};
+}
 // 新增视频相关状态
 const videoPlayer = ref(null);
 const videoSource = ref('/videos/01-周易大学-静心面相.mp4'); // 假视频地址
@@ -232,6 +279,17 @@ const videoCanPlay = ref(false);
 const isPlaying = ref(false);
 const isMuted = ref(true); // 初始静音避免自动播放被阻止
 const volume = ref(0.5); // 默认音量50%
+
+
+const hoverStates = reactive({
+  harmony: false,
+  ios: false,
+  mac: false
+})
+
+const setHoverState = (platform, isHover) => {
+  hoverStates[platform] = isHover
+}
 
 
 // 播放/暂停切换
@@ -309,32 +367,42 @@ const handleScroll = () => {
 };
 
 
-
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll);
 
   // 新增：移除视频事件监听
   const video = videoPlayer.value;
   if (video) {
-    video.removeEventListener('play', () => {});
-    video.removeEventListener('pause', () => {});
-    video.removeEventListener('ended', () => {});
+    video.removeEventListener('play', () => {
+    });
+    video.removeEventListener('pause', () => {
+    });
+    video.removeEventListener('ended', () => {
+    });
   }
 });
-
-
 
 
 </script>
 
 <style scoped>
+body * {
+  transition: opacity 0.3s ease;
+}
+
+.converting {
+  opacity: 0.5;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
-
+.container, .main-content, .home-page {
+  max-width: 100vw;  /* 关键：限制所有容器不超出视口 */
+  overflow-x: hidden;
+}
 .container {
   position: relative;
   display: flex;
@@ -342,7 +410,15 @@ onBeforeUnmount(() => {
   min-height: 100vh;
   background-color: #f5f5f5; /* 浅灰色背景 */
 }
-
+.bottom-green-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 33.33vh; /* 页面高度的1/3 */
+  background-color: #008000; /* 纯绿色 */
+  z-index: 0; /* 确保在内容层下方 */
+}
 /* 修改点：添加relative定位 */
 .header {
   display: flex;
@@ -373,21 +449,23 @@ onBeforeUnmount(() => {
   gap: 30px;
 }
 
-.nav-center .main-title-small {
+.main-title-small {
   font-size: 18px;
-  font-weight: normal;
-  color: #000000;
+  font-weight: bold;
+  color: #1D953F;
 }
+
 .nav-item {
-  font-size: 18px;
+  font-size: 12px;
   cursor: pointer;
   color: #999;
   position: relative;
-  padding: 5px 0;
+  padding: 5px 14px;
 }
+
 .nav-item.active {
   color: #000;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .nav-item.active::after {
@@ -399,6 +477,7 @@ onBeforeUnmount(() => {
   height: 2px;
   background-color: #4CAF50;
 }
+
 /* 修改点：右侧语言定位 */
 .nav-right {
   position: absolute;
@@ -446,7 +525,7 @@ onBeforeUnmount(() => {
   left: -3px; /* 左侧间距一致 */
   right: -3px; /* 右侧间距一致 */
   bottom: -1px; /* 底部间距一致 */
-  background-color: #4CAF50;
+  background-color: #1D953F;
   border-radius: 20px; /* 与容器相同圆角 */
   z-index: -1; /* 确保在文字下方 */
 }
@@ -459,21 +538,30 @@ onBeforeUnmount(() => {
 
 /* 主体内容样式 */
 .main-content {
+  position: relative;
+  z-index: 5;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 150px;
 }
 
 .main-title {
-  font-size: 48px;
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  font-size: 45px;
   font-weight: bold;
   letter-spacing: 2px;
-  color: #000000;
-  margin-bottom: 40px;
+  color: #1D953F;
 }
+
 .home-page {
   display: flex;
   flex-direction: column;
@@ -482,16 +570,28 @@ onBeforeUnmount(() => {
   width: 100%;
   position: relative;
 }
+
 /* 平台按钮区域 */
 .platform-buttons {
   display: flex;
-  gap: 30px;
+  gap: 50px;
+}
+
+.button-container {
+  position: fixed;
+  bottom: 35%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  transform: translateY(50%);
 }
 
 
 .android-btn:hover,
 .windows-btn:hover {
-  background-color: #4CAF50 !important; /* 绿色背景 */
+  background-color: #ffffff !important; /* 绿色背景 */
   position: relative; /* 为绝对定位子元素提供参照 */
 }
 
@@ -529,7 +629,7 @@ onBeforeUnmount(() => {
 .android-btn:hover .download-overlay,
 .windows-btn:hover .download-overlay {
   display: flex; /* 显示覆盖层 */
-  background-color: #4CAF50; /* 绿色背景 */
+  background-color: #ffffff; /* 绿色背景 */
 }
 
 /* 确保原始内容在悬停时隐藏 */
@@ -539,17 +639,15 @@ onBeforeUnmount(() => {
 }
 
 .download-icon {
-  width: 32px;
-  height: 32px;
+  width: 54px;
+  height: 54px;
   margin-bottom: 6px;
 }
-.download-button.outline:not(.app-store):hover .button-text span {
-  color: #4CAF50;
-}
+
 .download-text {
-  font-family: 'Microsoft YaHei', sans-serif; /* 新增字体设置 */
-  color: white;
-  font-size: 16px;
+  font-family: 'OPPOSans-M', sans-serif; /* 新增字体设置 */
+  color: #1D953F;
+  font-size: 21px;
   font-weight: normal;
 }
 
@@ -558,9 +656,9 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 90px;
-  border: 1px solid #dcdcdc;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #ffffff;
   border-radius: 8px;
   background: white;
   transition: all 0.3s ease;
@@ -573,9 +671,9 @@ onBeforeUnmount(() => {
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 8px;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
 }
 
 .button span {
@@ -605,16 +703,14 @@ onBeforeUnmount(() => {
 
 /* iOS按钮悬停时效果 */
 .ios-btn:hover {
-  background-color: #4CAF50 !important; /* 绿色背景 */
+  background-color: #ffffff !important; /* 绿色背景 */
 }
 
 .ios-btn:hover .original-content {
   visibility: hidden; /* 隐藏原始内容（保留布局空间） */
 }
 
-.ios-btn:hover .qr-overlay {
-  display: flex; /* 显示二维码层 */
-}
+
 /* ====== Mac页面样式（完全独立） ====== */
 
 .mac-page {
@@ -657,6 +753,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 /* 鼠标悬停效果 */
 .download-button:hover {
   transform: translateY(-3px);
@@ -696,7 +793,27 @@ onBeforeUnmount(() => {
   font-weight: normal;
 }
 
+.dev-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 14px;
+  font-weight: bold;
+}
 
+.harmonyos-btn:hover .dev-message,
+.ios-btn:hover .dev-message,
+.macos-btn:hover .dev-message {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 2;
+}
 
 /* 视频容器样式 */
 
@@ -714,35 +831,40 @@ onBeforeUnmount(() => {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
+
 .video-container video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   background-color: #f0f0f0;
 }
+
 .video-play-overlay {
   position: absolute;
-  bottom: 15px;     /* 距离画面底部15px */
-  right: 15px;      /* 距离画面右侧15px */
-  z-index: 20;      /* 确保在视频和控制栏上方 */
+  bottom: 15px; /* 距离画面底部15px */
+  right: 15px; /* 距离画面右侧15px */
+  z-index: 20; /* 确保在视频和控制栏上方 */
 }
+
 /* 播放按钮样式 */
 .play-btn-overlay {
   background: rgba(0, 0, 0, 0);
   border-radius: 50%;
-  width: 46px;      /* 按钮区域宽度 */
-  height: 46px;     /* 按钮区域高度 */
+  width: 46px; /* 按钮区域宽度 */
+  height: 46px; /* 按钮区域高度 */
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 }
+
 .play-btn-overlay img {
-  width: 100%;      /* 宽度100%填充容器 */
-  height: 100%;     /* 高度100%填充容器 */
+  width: 100%; /* 宽度100%填充容器 */
+  height: 100%; /* 高度100%填充容器 */
   object-fit: contain; /* 等比例缩放并完整显示 */
 }
+
 /* 自定义控制栏样式 */
 .custom-controls {
   position: absolute;
@@ -777,8 +899,6 @@ onBeforeUnmount(() => {
   height: 4px;
   accent-color: white; /* 滑块轨道颜色 */
 }
-
-
 
 
 </style>
