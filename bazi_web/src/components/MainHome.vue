@@ -224,8 +224,6 @@ const requestAndroidCfg = async () => {
   try {
     const response = await AppService.cfgRequest(
         `http://43.143.225.203:8911/cfg/Android/Debug/buildList.json`);
-    // 这里可以处理返回的数据（如存储到响应式变量中）
-    console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
     updatePlatformLink("Android",
         "http://43.143.225.203:8911/cfg/Android" + "/" +
@@ -240,8 +238,6 @@ const requestWindowsCfg = async () => {
   try {
     const response = await AppService.cfgRequest(
         `http://43.143.225.203:8911/cfg/Windows/Debug/buildList.json`);
-    // 这里可以处理返回的数据（如存储到响应式变量中）
-    console.log('在MainHome中接收到数据:', response.curVersionInfo);
 
     updatePlatformLink("Windows",
         "http://43.143.225.203:8911/cfg/Windows" + "/" +
@@ -572,11 +568,27 @@ body * {
   width: 100%;
   position: relative;
 }
+@media (max-width: 800px) {
+  .platform-buttons {
+    gap: 30px; /* 缩小间距 */
+    row-gap: 30px; /* 行间距 */
+  }
+}
 
+/* 新增：超窄屏时进一步调整 */
+@media (max-width: 600px) {
+  .platform-buttons {
+    gap: 20px;
+    row-gap: 20px;
+  }
+}
 /* 平台按钮区域 */
 .platform-buttons {
   display: flex;
+  flex-wrap: wrap; /* 关键：允许换行 */
+  justify-content: center; /* 保持居中 */
   gap: 50px;
+  max-width: 100%; /* 防止超出容器 */
 }
 
 .button-container {
