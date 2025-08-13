@@ -499,6 +499,7 @@ body * {
   justify-content: center;
   align-items: center;
   z-index: 1; /* 确保在绿色背景上方 */
+  white-space: nowrap;
 }
 
 /* 语言项样式 - 精确控制 */
@@ -515,6 +516,7 @@ body * {
 /* 选中状态的背景效果 */
 .lang-item.active {
   color: white; /* 文字变白 */
+  white-space: nowrap;
 }
 
 /* 关键修复：调整绿色背景位置 */
