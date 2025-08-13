@@ -533,7 +533,25 @@ body * {
 .lang-item.active {
   color: white;
 }
+.lang-container {
+  transition: all 0.3s ease; /* 添加平滑过渡效果 */
+  max-width: 100%; /* 确保不超过容器宽度 */
+}
 
+/* 窄屏时调整语言项内边距 */
+@media (max-width: 800px) {
+  .lang-item {
+    padding: 3px 15px; /* 缩小左右内边距 */
+  }
+}
+
+/* 超窄屏时进一步缩小 */
+@media (max-width: 600px) {
+  .lang-item {
+    padding: 3px 10px; /* 进一步缩小内边距 */
+    font-size: 13px; /* 稍微缩小字体 */
+  }
+}
 /* 主体内容样式 */
 .main-content {
   position: relative;
@@ -558,8 +576,21 @@ body * {
   font-weight: bold;
   letter-spacing: 2px;
   color: #1D953F;
+  transition: top 0.4s ease; /* 标题位置变化过渡 */
+}
+/* 窄屏时上移标题 */
+@media (max-width: 1000px) {
+  .main-title {
+    top: 20% !important; /* 上移标题 */
+  }
 }
 
+/* 超窄屏时进一步上移标题 */
+@media (max-width: 600px) {
+  .main-title {
+    top: 15% !important;
+  }
+}
 .home-page {
   display: flex;
   flex-direction: column;
@@ -586,11 +617,37 @@ body * {
 .platform-buttons {
   display: flex;
   flex-wrap: wrap; /* 关键：允许换行 */
+  flex-direction: row;
   justify-content: center; /* 保持居中 */
   gap: 50px;
   max-width: 100%; /* 防止超出容器 */
+  align-content: flex-start;
+  transition: gap 0.3s ease;
+}
+@media (max-width: 1000px) {
+  .button-container {
+    bottom: 30%; /* 下移按钮区域 */
+    min-height: 180px; /* 增加最小高度 */
+  }
+
+  .platform-buttons {
+    gap: 30px; /* 缩小间距 */
+    row-gap: 30px;
+  }
 }
 
+/* 超窄屏时进一步增加高度 */
+@media (max-width: 600px) {
+  .button-container {
+    bottom: 25%; /* 继续下移 */
+    min-height: 240px; /* 进一步增加高度 */
+  }
+
+  .platform-buttons {
+    gap: 20px;
+    row-gap: 20px;
+  }
+}
 .button-container {
   position: fixed;
   bottom: 35%;
@@ -600,6 +657,9 @@ body * {
   display: flex;
   justify-content: center;
   transform: translateY(50%);
+
+  transition: min-height 0.4s ease; /* 添加高度变化过渡 */
+  min-height: 120px; /* 基础高度 */
 }
 
 
@@ -670,8 +730,8 @@ body * {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border: 1px solid #ffffff;
   border-radius: 8px;
   background: white;
@@ -687,7 +747,7 @@ body * {
 .icon {
   width: 50px;
   height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 13px;
 }
 
 .button span {
