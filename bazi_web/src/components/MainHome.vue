@@ -239,13 +239,13 @@ const requestAndroidCfg = async () => {
   try {
     var cfg=configData.value;
     var url="http://"+cfg.address+"/cfg/Android/"+cfg.mode+"/buildList.json";
-
+    console.log(url)
     const response = await AppService.cfgRequest(url);
 
     url="http://"+cfg.address+"/cfg/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
-
+    console.log(url)
     updatePlatformLink("Android",url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
@@ -256,10 +256,12 @@ const requestWindowsCfg = async () => {
   try {
     var cfg=configData.value;
     var url="http://"+cfg.address+"/cfg/Windows/"+cfg.mode+"/buildList.json";
+    console.log(url)
     const response = await AppService.cfgRequest(url);
     url="http://"+cfg.address+"/cfg/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
+    console.log(url)
     updatePlatformLink("Windows",url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
