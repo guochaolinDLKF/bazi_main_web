@@ -165,9 +165,24 @@ import {ref, onMounted, onBeforeUnmount, reactive} from 'vue';
 import { convertDOM } from './../zhConverter';
 import {AppService} from './AppService';
 
+
+const configData = ref(null); // 存储配置数据
 // 当前激活的语言状态
 const activeLang = ref('simplified'); // 默认简体
 const currentPage = ref('home'); // 默认显示首页
+
+
+const fetchConfig = async () => {
+  try {
+    const response = await fetch('/config/config.json'); // 假设配置文件在public目录下
+    if (!response.ok) throw new Error('配置加载失败');
+    configData.value = await response.json();
+    console.log('配置文件加载成功!!');
+  } catch (error) {
+    console.error('配置文件读取错误:', error);
+  }
+};
+
 // 语言切换方法
 const setActiveLang = (lang) => {
   activeLang.value = lang; // 更新激活状态
@@ -181,7 +196,7 @@ onMounted(async () => {
   if (activeLang.value === 'traditional') {
     convertDOM(true);
   }
-
+  await fetchConfig();
   await requestAndroidCfg();
   await requestWindowsCfg();
 });
@@ -222,13 +237,16 @@ const platforms = reactive([
 ]);
 const requestAndroidCfg = async () => {
   try {
-    const response = await AppService.cfgRequest(
-        `http://43.143.225.203:8911/cfg/Android/Debug/buildList.json`);
+    var cfg=configData.value;
+    var url="http://"+cfg.address+"/cfg/Android/"+cfg.mode+"/buildList.json";
 
-    updatePlatformLink("Android",
-        "http://43.143.225.203:8911/cfg/Android" + "/" +
+    const response = await AppService.cfgRequest(url);
+
+    url="http://"+cfg.address+"/cfg/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
-        response.curVersionInfo.fileList[0].fileName)
+        response.curVersionInfo.fileList[0].fileName;
+
+    updatePlatformLink("Android",url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
     // 这里可以添加错误处理逻辑（如显示错误提示）
@@ -236,13 +254,13 @@ const requestAndroidCfg = async () => {
 };
 const requestWindowsCfg = async () => {
   try {
-    const response = await AppService.cfgRequest(
-        `http://43.143.225.203:8911/cfg/Windows/Debug/buildList.json`);
-
-    updatePlatformLink("Windows",
-        "http://43.143.225.203:8911/cfg/Windows" + "/" +
+    var cfg=configData.value;
+    var url="http://"+cfg.address+"/cfg/Windows/"+cfg.mode+"/buildList.json";
+    const response = await AppService.cfgRequest(url);
+    url="http://"+cfg.address+"/cfg/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
-        response.curVersionInfo.fileList[0].fileName)
+        response.curVersionInfo.fileList[0].fileName;
+    updatePlatformLink("Windows",url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
     // 这里可以添加错误处理逻辑（如显示错误提示）
