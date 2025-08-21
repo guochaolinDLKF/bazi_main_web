@@ -5,7 +5,7 @@
 
       <!-- 左侧标题 -->
       <div class="nav-left">
-        <div class="main-title-small">八字玄机</div>
+        <div class="main-title-small">易德八字</div>
       </div>
 
 
@@ -45,7 +45,7 @@
       <main class="main-content">
         <div v-if="currentPage === 'home'" class="home-page">
           <div class="content-wrapper">
-          <div class="main-title">八字玄机</div>
+          <div class="main-title">易德八字</div>
           </div>
           <div class="button-container">
             <div class="platform-buttons">
