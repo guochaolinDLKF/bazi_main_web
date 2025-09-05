@@ -406,16 +406,17 @@ const showPrivacyPolicy = () => {
   // 这里可以实现隐私政策的展示逻辑
   console.log('显示隐私政策');
   // 实际应用中可能是:
-  // window.open('/privacy-policy', '_blank');
+   window.open('/src/about/privacy.html');
   // 或者显示一个模态框
 };
 
 const showServiceAgreement = () => {
-  console.log('显示服务协议');
+  window.open('/src/about/agreement.html');
 };
 
 const showRightsStatement = () => {
   console.log('显示权利声明');
+  window.open('/src/about/law.html');
 };
 </script>
 
