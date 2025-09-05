@@ -41,128 +41,141 @@
       </div>
     </header>
 
-      <!-- 主体内容区域 -->
-      <main class="main-content">
-        <div v-if="currentPage === 'home'" class="home-page">
-          <div class="content-wrapper">
+    <!-- 主体内容区域 -->
+    <main class="main-content">
+      <div v-if="currentPage === 'home'" class="home-page">
+        <div class="content-wrapper">
           <div class="main-title">易德八字</div>
-          </div>
-          <div class="button-container">
-            <div class="platform-buttons">
-              <div
-                  v-for="(platform, index) in platforms"
-                  :key="index"
-                  class="button"
-                  @click.stop="handleClick(platform, $event)"
-                  @mouseover="setHoverState(platform.id, true)"
-                  @mouseleave="setHoverState(platform.id, false)"
-                  :class="{
+        </div>
+        <div class="button-container">
+          <div class="platform-buttons">
+            <div
+                v-for="(platform, index) in platforms"
+                :key="index"
+                class="button"
+                @click.stop="handleClick(platform, $event)"
+                @mouseover="setHoverState(platform.id, true)"
+                @mouseleave="setHoverState(platform.id, false)"
+                :class="{
             'android-btn': platform.name === 'Android',
             'windows-btn': platform.name === 'Windows',
             'ios-btn': platform.name === 'iOS',
             'harmonyos-btn': platform.name === 'HarmonyOS',
             'macos-btn': platform.name === 'MacOS'
           }"
-              >
-                <!-- 默认显示内容 -->
-                <div class="original-content" v-show="!hoverStates[platform.id]">
-                  <img :src="platform.icon" :alt="platform.name" class="icon"/>
-                  <span>{{ platform.name }}</span>
-                </div>
-                <!-- 悬停时显示的研发提示 -->
-                <div class="dev-message" v-show="hoverStates[platform.id]">
-                  正在研发中
-                </div>
-                <!-- 鼠标悬停时显示的内容（仅Android和Windows按钮） -->
-                <div class="download-overlay">
-                  <img src="/icons/download.png" alt="下载" class="download-icon"/>
-                  <span class="download-text">立即下载</span>
-                </div>
-                <!-- 二维码覆盖层 -->
-                <div class="qr-overlay">
-                  <img src="/icons/ios-qr.png" alt="iOS下载二维码" class="qr-image"/>
-                </div>
+            >
+              <!-- 默认显示内容 -->
+              <div class="original-content" v-show="!hoverStates[platform.id]">
+                <img :src="platform.icon" :alt="platform.name" class="icon"/>
+                <span>{{ platform.name }}</span>
               </div>
-            </div>
-          </div>
-          <!-- 新增视频播放组件 -->
-          <!--  <div class="video-container">
-              <video
-                  ref="videoPlayer"
-                  :poster="videoPoster"
-                  muted
-                  playsinline
-                  @play="onVideoPlay"
-                  @pause="onVideoPause"
-                  @loadedmetadata="onVideoLoaded"
-                  @canplay="onVideoCanPlay"
-              >
-                <source :src="videoSource" type="video/mp4">
-                您的浏览器不支持视频播放。
-              </video>-->
-
-          <!-- 新增：视频画面内的播放按钮 -->
-          <!--  <div class="video-play-overlay">
-             <button @click="togglePlay" class="play-btn-overlay">
-               <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
-             </button>
-           </div> -->
-
-          <!-- 自定义控制栏 -->
-          <!-- <div class="custom-controls">
-             <div class="volume-control">
-               <button @click="toggleMute" class="control-btn">
-                 <img :src="isMuted ? '/icons/mute.png' : '/icons/volume.png'" alt="音量控制">
-               </button>
-               <input
-                   type="range"
-                   min="0" max="1" step="0.1"
-                   v-model="volume"
-                   @input="setVolume"
-                   class="volume-slider"
-               >
-             </div>
-
-           </div>
-         </div>-->
-
-        </div>
-
-        <!-- Mac版页面 -->
-        <div v-if="currentPage === 'mac'" class="mac-page">
-          <div class="mac-title">八字玄机MacOS版</div>
-
-          <!-- 下载按钮组 -->
-          <div class="download-buttons">
-            <!-- 白色虚线按钮 -->
-            <div class="download-button outline">
-              <img src="/icons/mac_download_normal.png" alt="下载" class="button-icon"/>
-              <div class="button-text">
-                <span>立即下载</span>
-                <span class="version">1.1.0</span>
+              <!-- 悬停时显示的研发提示 -->
+              <div class="dev-message" v-show="hoverStates[platform.id]">
+                正在研发中
               </div>
-            </div>
-
-            <!-- 白色虚线按钮（App Store版） -->
-            <div class="download-button outline app-store">
-              <img src="/icons/mac_store.png" alt="App Store" class="button-icon"/>
-              <div class="button-text">
-                <span>Mac App Store</span>
-                <span class="version">1.1.0</span>
+              <!-- 鼠标悬停时显示的内容（仅Android和Windows按钮） -->
+              <div class="download-overlay">
+                <img src="/icons/download.png" alt="下载" class="download-icon"/>
+                <span class="download-text">立即下载</span>
+              </div>
+              <!-- 二维码覆盖层 -->
+              <div class="qr-overlay">
+                <img src="/icons/ios-qr.png" alt="iOS下载二维码" class="qr-image"/>
               </div>
             </div>
           </div>
         </div>
-      </main>
+        <!-- 绿色区域 - 移动到按钮和视频之间 -->
+        <div class="bottom-green-area"></div>
 
-    </div>
-  <div class="bottom-green-area"></div>
+
+        <!-- 视频播放组件 -->
+        <!-- <div class="video-container">
+           <video
+               ref="videoPlayer"
+               :poster="videoPoster"
+               playsinline
+               muted
+               @loadedmetadata="onVideoLoaded"
+               @canplay="onVideoCanPlay"
+               class="custom-video"
+           >
+             <source :src="videoSource" type="video/mp4">
+             您的浏览器不支持视频播放。
+           </video>
+
+          <div class="video-play-overlay">
+            <button @click="togglePlay" class="play-btn-overlay">
+              <img :src="isPlaying ? '/icons/pause_video.png' : '/icons/play_video.png'" alt="播放控制">
+            </button>
+          </div>
+
+        </div> -->
+
+        <div class="white-rectangle">
+          <div class="qr-code-container">
+            <div class="qr-code-item">
+              <img src="/icons/ios-qr.png" alt="微信客服二维码1" class="qr-code-image"/>
+              <p class="qr-code-text">微信客服</p>
+            </div>
+            <!--<div class="qr-code-item">
+              <img src="/icons/ios-qr.png" alt="微信客服二维码2" class="qr-code-image"/>
+              <p class="qr-code-text">微信客服2</p>
+            </div>-->
+          </div>
+        </div>
+      </div>
+
+      <!-- Mac版页面 -->
+      <div v-if="currentPage === 'mac'" class="mac-page">
+        <div class="mac-title">八字玄机MacOS版</div>
+
+        <!-- 下载按钮组 -->
+        <div class="download-buttons">
+          <!-- 白色虚线按钮 -->
+          <div class="download-button outline">
+            <img src="/icons/mac_download_normal.png" alt="下载" class="button-icon"/>
+            <div class="button-text">
+              <span>立即下载</span>
+              <span class="version">1.1.0</span>
+            </div>
+          </div>
+
+          <!-- 白色虚线按钮（App Store版） -->
+          <div class="download-button outline app-store">
+            <img src="/icons/mac_store.png" alt="App Store" class="button-icon"/>
+            <div class="button-text">
+              <span>Mac App Store</span>
+              <span class="version">1.1.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- 新增底部信息区域 -->
+    <footer class="footer-section">
+      <div class="footer-links">
+        <a @click="showPrivacyPolicy">隐私政策</a>
+        <span class="separator">|</span>
+        <a @click="showServiceAgreement">服务协议</a>
+        <span class="separator">|</span>
+        <a @click="showRightsStatement">权利声明</a>
+      </div>
+      <div class="footer-records">
+        <span>京网安备XXXXX号</span>
+        <span>京ICP备XXXXXXXX号</span>
+        <span>京网文 XXXXX号</span>
+      </div>
+    </footer>
+  </div>
+
+
 </template>
 
 <script setup>
 // 修复：添加响应式状态管理
 import {ref, onMounted, onBeforeUnmount, reactive} from 'vue';
-import { convertDOM } from './../zhConverter';
+import {convertDOM} from './../zhConverter';
 import {AppService} from './AppService';
 
 
@@ -191,14 +204,17 @@ const setActiveLang = (lang) => {
 };
 // 生命周期钩子
 onMounted(async () => {
-  window.addEventListener('scroll', handleScroll);
-  setupVideoEventListeners(); // 新增事件监听
   if (activeLang.value === 'traditional') {
     convertDOM(true);
   }
   await fetchConfig();
   await requestAndroidCfg();
   await requestWindowsCfg();
+
+  // 初始化视频观察器
+  setTimeout(() => {
+    initVideoObserver();
+  }, 100);
 });
 // 平台按钮数据 - 使用假路径
 const platforms = reactive([
@@ -237,16 +253,16 @@ const platforms = reactive([
 ]);
 const requestAndroidCfg = async () => {
   try {
-    var cfg=configData.value;
-    var url="http://"+cfg.address+"/cfg/Android/"+cfg.mode+"/buildList.json";
+    var cfg = configData.value;
+    var url = "http://" + cfg.address + "/cfg/Android/" + cfg.mode + "/buildList.json";
     console.log(url)
     const response = await AppService.cfgRequest(url);
 
-    url="http://"+cfg.address+"/cfg/Android" + "/" +
+    url = "http://" + cfg.address + "/cfg/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
     console.log(url)
-    updatePlatformLink("Android",url)
+    updatePlatformLink("Android", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
     // 这里可以添加错误处理逻辑（如显示错误提示）
@@ -254,15 +270,15 @@ const requestAndroidCfg = async () => {
 };
 const requestWindowsCfg = async () => {
   try {
-    var cfg=configData.value;
-    var url="http://"+cfg.address+"/cfg/Windows/"+cfg.mode+"/buildList.json";
+    var cfg = configData.value;
+    var url = "http://" + cfg.address + "/cfg/Windows/" + cfg.mode + "/buildList.json";
     console.log(url)
     const response = await AppService.cfgRequest(url);
-    url="http://"+cfg.address+"/cfg/Windows" + "/" +
+    url = "http://" + cfg.address + "/cfg/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
     console.log(url)
-    updatePlatformLink("Windows",url)
+    updatePlatformLink("Windows", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
     // 这里可以添加错误处理逻辑（如显示错误提示）
@@ -293,9 +309,10 @@ const videoCanPlay = ref(false);
 
 // 新增视频控制状态
 const isPlaying = ref(false);
-const isMuted = ref(true); // 初始静音避免自动播放被阻止
-const volume = ref(0.5); // 默认音量50%
+const volume = ref(1); // 默认音量50%
 
+// Intersection Observer用于检测视频可见性
+const videoObserver = ref(null);
 
 const hoverStates = reactive({
   harmony: false,
@@ -318,87 +335,88 @@ const togglePlay = () => {
     isPlaying.value = false;
   }
 };
-// 静音切换
-const toggleMute = () => {
-  videoPlayer.value.muted = !videoPlayer.value.muted;
-  isMuted.value = videoPlayer.value.muted;
-};
 
-// 音量设置
-const setVolume = () => {
-  videoPlayer.value.volume = volume.value;
-  videoPlayer.value.muted = (volume.value === 0);
-  isMuted.value = (volume.value === 0);
-};
 // 视频加载完成回调
 const onVideoLoaded = () => {
   videoLoaded.value = true;
-  checkVideoPlayback();
 };
 
 // 视频可以播放回调
 const onVideoCanPlay = () => {
   videoCanPlay.value = true;
-  checkVideoPlayback();
 };
 
-// 检查是否应该播放视频
-const checkVideoPlayback = () => {
-  if (!videoPlayer.value || !videoLoaded.value || !videoCanPlay.value) return;
+// 初始化Intersection Observer来检测视频可见性
+const initVideoObserver = () => {
+  if (!videoPlayer.value) return;
+  console.log("initVideoObserver")
+  videoObserver.value = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // 视频进入视口，尝试播放
+            if (videoPlayer.value.paused) {
+              videoPlayer.value.muted = false;
+              videoPlayer.value.volume = volume.value;
+              videoPlayer.value.play().then(() => {
+                isPlaying.value = true;
 
-  const videoRect = videoPlayer.value.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
+              }).catch(error => {
+                console.log('自动播放被阻止:', error);
+                videoPlayer.value.play();
+                videoPlayer.value.muted = false;
+              });
 
-  // 当视频顶部进入视口时播放（距离视口顶部小于视口高度）
-  if (videoRect.top < viewportHeight) {
-    videoPlayer.value.play().catch(error => {
-      console.log('自动播放被阻止:', error);
-    });
-  }
-};
-const setupVideoEventListeners = () => {
-  const video = videoPlayer.value;
-  if (!video) return;
+            }
+          } else {
+            // 视频离开视口，暂停播放
+            if (!videoPlayer.value.paused) {
+              videoPlayer.value.pause();
+              isPlaying.value = false;
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5, // 当50%的视频在视口中时触发
+      }
+  );
+  videoObserver.value.observe(videoPlayer.value);
 
-  // 视频播放时更新按钮状态
-  video.addEventListener('play', () => {
-    isPlaying.value = true;
-  });
-
-  // 视频暂停时更新按钮状态
-  video.addEventListener('pause', () => {
-    isPlaying.value = false;
-  });
-
-  // 视频结束时更新按钮状态
-  video.addEventListener('ended', () => {
-    isPlaying.value = false;
-  });
-};
-// 滚动事件处理
-const handleScroll = () => {
-  if (currentPage.value === 'home' && videoPlayer.value) {
-    checkVideoPlayback();
-  }
 };
 
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll);
 
-  // 新增：移除视频事件监听
+// 销毁Intersection Observer
+  if (videoObserver.value) {
+    videoObserver.value.disconnect();
+  }
+
+  // 移除视频事件监听
   const video = videoPlayer.value;
   if (video) {
-    video.removeEventListener('play', () => {
-    });
-    video.removeEventListener('pause', () => {
-    });
-    video.removeEventListener('ended', () => {
-    });
+    video.removeEventListener('play', () => {});
+    video.removeEventListener('pause', () => {});
+    video.removeEventListener('ended', () => {});
   }
 });
 
+const showPrivacyPolicy = () => {
+  // 这里可以实现隐私政策的展示逻辑
+  console.log('显示隐私政策');
+  // 实际应用中可能是:
+  // window.open('/privacy-policy', '_blank');
+  // 或者显示一个模态框
+};
 
+const showServiceAgreement = () => {
+  console.log('显示服务协议');
+};
+
+const showRightsStatement = () => {
+  console.log('显示权利声明');
+};
 </script>
 
 <style scoped>
@@ -406,19 +424,18 @@ body * {
   transition: opacity 0.3s ease;
 }
 
-.converting {
-  opacity: 0.5;
-}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
+
 .container, .main-content, .home-page {
-  max-width: 100vw;  /* 关键：限制所有容器不超出视口 */
+  max-width: 100vw; /* 关键：限制所有容器不超出视口 */
   overflow-x: hidden;
 }
+
 .container {
   position: relative;
   display: flex;
@@ -426,15 +443,12 @@ body * {
   min-height: 100vh;
   background-color: #f5f5f5; /* 浅灰色背景 */
 }
+
 .bottom-green-area {
-  position: fixed;
-  bottom: 0;
   left: 0;
   width: 100%;
-  height: 33.33vh; /* 页面高度的1/3 */
-  background-color: #008000; /* 纯绿色 */
-  z-index: 0; /* 确保在内容层下方 */
 }
+
 /* 修改点：添加relative定位 */
 .header {
   display: flex;
@@ -469,6 +483,15 @@ body * {
   font-size: 18px;
   font-weight: bold;
   color: #1D953F;
+}
+
+.main-title,
+.button-container,
+.bottom-green-area,
+.video-container {
+  position: relative; /* 关键：使元素跟随页面滚动 */
+  transform: none; /* 移除可能存在的变换 */
+  z-index: auto; /* 重置层级 */
 }
 
 .nav-item {
@@ -553,6 +576,7 @@ body * {
 .lang-item.active {
   color: white;
 }
+
 .lang-container {
   transition: all 0.3s ease; /* 添加平滑过渡效果 */
   max-width: 100%; /* 确保不超过容器宽度 */
@@ -572,6 +596,7 @@ body * {
     font-size: 13px; /* 稍微缩小字体 */
   }
 }
+
 /* 主体内容样式 */
 .main-content {
   position: relative;
@@ -584,33 +609,109 @@ body * {
 }
 
 .main-title {
-  position: fixed;
-  top: 25%;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
   text-align: center;
   width: 100%;
-  margin: 0;
   font-size: 45px;
   font-weight: bold;
   letter-spacing: 2px;
   color: #1D953F;
   transition: top 0.4s ease; /* 标题位置变化过渡 */
+
+  margin-top: 120px; /* 可根据需要添加间距 */
+  margin-bottom: 300px;
 }
+
 /* 窄屏时上移标题 */
 @media (max-width: 1000px) {
   .main-title {
-    top: 20% !important; /* 上移标题 */
+    top: 0; /* 移除固定定位 */
+    margin-top: 100px;
+    margin-bottom: 200px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 180px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-title {
+    top: unset !important; /* 移除固定定位 */
+    margin-top: 100px;
+    margin-bottom: 200px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 240px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 800px) {
+  .main-title {
+    top: unset !important; /* 移除固定定位 */
+    margin-top: 100px;
+    margin-bottom: 200px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 240px;
+    margin-bottom: 20px;
+  }
+}
+
+/* 超窄屏时进一步上移标题 */
+@media (max-width: 750px) {
+  .main-title {
+    top: unset !important; /* 移除固定定位 */
+    margin-top: 100px;
+    margin-bottom: 200px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 240px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 680px) {
+  .main-title {
+    top: unset !important; /* 移除固定定位 */
+    margin-top: 80px;
+    margin-bottom: 100px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 240px;
+    margin-bottom: 20px;
   }
 }
 
 /* 超窄屏时进一步上移标题 */
 @media (max-width: 600px) {
   .main-title {
-    top: 15% !important;
+    top: unset !important; /* 移除固定定位 */
+    margin-top: 80px;
+    margin-bottom: 70px;
+  }
+
+  .button-container {
+    bottom: unset; /* 移除固定定位 */
+    min-height: 240px;
+    margin-bottom: 20px;
   }
 }
+
 .home-page {
   display: flex;
   flex-direction: column;
@@ -619,6 +720,7 @@ body * {
   width: 100%;
   position: relative;
 }
+
 @media (max-width: 800px) {
   .platform-buttons {
     gap: 30px; /* 缩小间距 */
@@ -633,6 +735,7 @@ body * {
     row-gap: 20px;
   }
 }
+
 /* 平台按钮区域 */
 .platform-buttons {
   display: flex;
@@ -644,9 +747,10 @@ body * {
   align-content: flex-start;
   transition: gap 0.3s ease;
 }
+
 @media (max-width: 1000px) {
   .button-container {
-    bottom: 30%; /* 下移按钮区域 */
+    bottom: 10%; /* 下移按钮区域 */
     min-height: 180px; /* 增加最小高度 */
   }
 
@@ -668,18 +772,20 @@ body * {
     row-gap: 20px;
   }
 }
+
 .button-container {
-  position: fixed;
-  bottom: 35%;
+  position: relative;
+  top: 50px;
   left: 0;
   right: 0;
   z-index: 10;
   display: flex;
   justify-content: center;
-  transform: translateY(50%);
-
+  transform: none;
+  margin-bottom: 0px;
   transition: min-height 0.4s ease; /* 添加高度变化过渡 */
   min-height: 120px; /* 基础高度 */
+
 }
 
 
@@ -790,8 +896,8 @@ body * {
 
 /* 二维码图片样式 */
 .qr-image {
-  width: 70px; /* 二维码尺寸 */
-  height: 70px;
+  width: 100px; /* 二维码尺寸 */
+  height: 100px;
   object-fit: contain;
 }
 
@@ -913,7 +1019,6 @@ body * {
 
 .video-container {
   position: relative;
-  top: 1080px;
 }
 
 .video-container {
@@ -959,22 +1064,6 @@ body * {
   object-fit: contain; /* 等比例缩放并完整显示 */
 }
 
-/* 自定义控制栏样式 */
-.custom-controls {
-  position: absolute;
-  left: 15px;
-  bottom: 15px;
-  display: flex;
-  justify-content: space-between;
-  width: calc(100% - 30px); /* 减去左右边距 */
-}
-
-.control-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
 
 .control-btn img {
   width: 24px;
@@ -982,17 +1071,134 @@ body * {
   filter: invert(1); /* 白色图标 */
 }
 
-.volume-control {
+/* 修改视频容器样式 */
+.video-container {
+  position: relative; /* 改为相对定位 */
+  width: 100%;
+  max-width: 800px; /* 限制最大宽度 */
+  margin-top: 100px; /* 确保顶部无额外间距 */
+  margin-bottom: 40px; /* 底部添加一些间距 */
+  aspect-ratio: 16/9; /* 保持宽高比 */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* 确保视频在绿色区域上方 */
+}
+
+/* 隐藏所有浏览器默认视频控制条 */
+.custom-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 隐藏所有控制条 */
+
+  ::-webkit-media-controls {
+    display: none !important;
+  }
+
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE和Edge */
+  -ms-overflow-style: none;
+}
+
+
+/* 调整底部绿色区域 */
+.bottom-green-area {
+  width: 100%;
+  height: 33.33vh; /* 保持高度 */
+  background-color: #008000; /* 绿色 */
+  z-index: 0; /* 确保层级 */
+}
+.white-rectangle {
+  width: 100vw; /* 页面宽度 */
+  height: 120px; /* 指定高度 */
+  background-color: white; /* 白色背景 */
+  margin-top: 40px; /* 与视频容器的间距保持一致 */
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
 }
 
-.volume-slider {
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px; /* 两个二维码之间的间距 */
+  width: 100%;
+  max-width: 800px;
+}
+
+.qr-code-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code-image {
   width: 80px;
-  height: 4px;
-  accent-color: white; /* 滑块轨道颜色 */
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+.qr-code-text{
+  font-size: 10px;
+}
+/* 确保主内容区域有足够空间 */
+.main-content {
+  padding-bottom: 0; /* 增加底部内边距确保内容不被绿色区域覆盖 */
 }
 
 
+/* 新增底部样式 */
+.footer-section {
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  margin-top: auto; /* 确保 footer 始终在底部 */
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  font-size: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #1D953F;
+}
+
+.separator {
+  margin: 0 10px;
+  color: #ccc;
+}
+
+.footer-records {
+  font-size: 10px;
+  color: #999;
+}
+
+.footer-records span {
+  margin: 0 8px;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+  .footer-records {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .footer-records span {
+    margin: 0;
+  }
+}
 </style>
