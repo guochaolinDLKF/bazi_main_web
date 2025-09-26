@@ -207,7 +207,10 @@ onMounted(async () => {
   if (activeLang.value === 'traditional') {
     convertDOM(true);
   }
+
   await fetchConfig();
+
+  await saveVisitInfo();
   await requestAndroidCfg();
   await requestWindowsCfg();
 
@@ -251,12 +254,23 @@ const platforms = reactive([
     link: "https://default-macos.com"
   }
 ]);
+
+const saveVisitInfo = async ()=>{
+  var cfg = configData.value;
+  var url =  "http://" + cfg.optionUrl+"/game/visit_page";
+  await AppService.getRequest(url);
+};
+const saveDownInfo = async (platform)=>{
+  var cfg = configData.value;
+  var url =  "http://" + cfg.optionUrl+"/game/down_info?downPlatform="+platform;
+  await AppService.getRequest(url);
+};
 const requestAndroidCfg = async () => {
   try {
     var cfg = configData.value;
     var url = "http://" + cfg.address + "/cfg/Android/" + cfg.mode + "/buildList.json";
     //console.log(url)
-    const response = await AppService.cfgRequest(url);
+    const response = await AppService.getRequest(url);
 
     url = "http://" + cfg.address + "/cfg/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
@@ -273,7 +287,7 @@ const requestWindowsCfg = async () => {
     var cfg = configData.value;
     var url = "http://" + cfg.address + "/package/Windows/" + cfg.mode + "/buildList.json";
     //console.log(url)
-    const response = await AppService.cfgRequest(url);
+    const response = await AppService.getRequest(url);
     url = "http://" + cfg.address + "/package/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
@@ -296,7 +310,7 @@ const handleClick = (platform, event) => {
     event.preventDefault(); // 阻止默认行为
     return; // 不执行后续逻辑
   }
-
+  saveDownInfo(platform);
   // 其他平台正常跳转
   window.open(platform.link, '_blank');
 }
