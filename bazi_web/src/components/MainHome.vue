@@ -310,7 +310,7 @@ const handleClick = (platform, event) => {
     event.preventDefault(); // 阻止默认行为
     return; // 不执行后续逻辑
   }
-  saveDownInfo(platform);
+  saveDownInfo(platform.name);
   // 其他平台正常跳转
   window.open(platform.link, '_blank');
 }

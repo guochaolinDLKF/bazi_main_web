@@ -13,9 +13,11 @@ export interface ApiResponse<T = any> {
 
 // 定义错误类型
 export class HttpError extends Error {
+    public status: number;
+
     constructor(status: number, message: string) {
         super(message);
-        console.error("status: ", status);
+        this.status = status;
         this.name = 'HttpError';
     }
 }
@@ -40,13 +42,27 @@ export async function httpRequest<T = any>(
         const config: RequestInit = {
             method,
             signal: controller.signal,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {},
         };
 
-        if (data && method !== 'GET') {
-            config.body = JSON.stringify(data);
-        } else if (data && method === 'GET') {
-            url += '?' + new URLSearchParams(data).toString();
+        // 区分GET和其他方法的处理
+        if (method === 'GET') {
+            // GET请求：参数拼接到URL
+            if (data) {
+                const params = new URLSearchParams(data).toString();
+                url += (url.includes('?') ? '&' : '?') + params;
+            }
+            // GET请求不设置Content-Type，避免触发预检
+        } else {
+            // 非GET请求：设置JSON内容类型
+            config.headers = {
+                'Content-Type': 'application/json',
+                ...config.headers,
+            };
+
+            if (data) {
+                config.body = JSON.stringify(data);
+            }
         }
 
         const response = await fetch(url, config);
@@ -60,11 +76,11 @@ export async function httpRequest<T = any>(
         return { status: response.status, data: responseData };
     } catch (error) {
         clearTimeout(timeoutId);
-        console.log(error);
+
         if (error instanceof HttpError) {
-            console.error(error);
             throw error;
         }
+
         if (error instanceof DOMException && error.name === 'AbortError') {
             throw new HttpError(408, `请求超时: ${timeout}ms`);
         }
@@ -88,7 +104,7 @@ export const post = <T = any>(url: string, data: any, timeout?: number) =>
 export const put = <T = any>(url: string, data: any, timeout?: number) =>
     httpRequest<T>(url, 'PUT', data, timeout);
 
-export const del = <T = any>(url: string, timeout?: number) =>
-    httpRequest<T>(url, 'DELETE', undefined, timeout);
+export const del = <T = any>(url: string, data?: any, timeout?: number) =>
+    httpRequest<T>(url, 'DELETE', data, timeout);
 
-export default { post, get,put,del };
+export default { get, post, put, del };
