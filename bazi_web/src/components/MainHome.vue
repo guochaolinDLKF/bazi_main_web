@@ -190,7 +190,7 @@ const fetchConfig = async () => {
     const response = await fetch('/config/config.json'); // 假设配置文件在public目录下
     if (!response.ok) throw new Error('配置加载失败');
     configData.value = await response.json();
-    console.log('配置文件加载成功!!');
+    //console.log('配置文件加载成功!!');
   } catch (error) {
     console.error('配置文件读取错误:', error);
   }
@@ -257,12 +257,14 @@ const platforms = reactive([
 
 const saveVisitInfo = async ()=>{
   var cfg = configData.value;
-  var url =  "http://" + cfg.optionUrl+"/game/visit_page";
+  var url =  "http://" + cfg.address+"/down_info/visit_page";
+  //console.log(url);
   await AppService.getRequest(url);
 };
 const saveDownInfo = async (platform)=>{
   var cfg = configData.value;
-  var url =  "http://" + cfg.optionUrl+"/game/down_info?downPlatform="+platform;
+  var url =  "http://" + cfg.address+"/down_info/down_info?downPlatform="+platform;
+  //console.log(url);
   await AppService.getRequest(url);
 };
 const requestAndroidCfg = async () => {
