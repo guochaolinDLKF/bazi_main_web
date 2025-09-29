@@ -128,7 +128,7 @@
 
       <!-- Mac版页面 -->
       <div v-if="currentPage === 'mac'" class="mac-page">
-        <div class="mac-title">八字玄机MacOS版</div>
+        <div class="mac-title">易德自在MacOS版</div>
 
         <!-- 下载按钮组 -->
         <div class="download-buttons">
