@@ -1,5 +1,16 @@
 <template>
   <div class="container">
+
+    <div v-if="showAlertPopup" class="popup-mask">
+      <div class="popup-container">
+        <div class="popup-content">
+          <h3>重要通知</h3>
+          <p>请访问我们的新官网获取更多服务</p>
+        </div>
+        <button @click="redirectToNewPage" class="popup-button">前往新页面</button>
+      </div>
+    </div>
+
     <!-- 顶部导航栏 - 修正为三栏布局 -->
     <header class="header">
 
@@ -185,6 +196,16 @@ const activeLang = ref('simplified'); // 默认简体
 const currentPage = ref('home'); // 默认显示首页
 
 
+const showAlertPopup = ref(true); // 控制弹窗显示
+
+// 跳转到新页面
+const redirectToNewPage = () => {
+  showAlertPopup.value = false;
+  document.body.style.overflow = ''; // 恢复页面滚动
+  window.location.href = 'http://47.100.111.124:8912/index.html'; // 替换为目标URL
+};
+
+
 const fetchConfig = async () => {
   try {
     const response = await fetch('/config/config.json'); // 假设配置文件在public目录下
@@ -204,6 +225,11 @@ const setActiveLang = (lang) => {
 };
 // 生命周期钩子
 onMounted(async () => {
+
+  if (showAlertPopup.value) {
+    document.body.style.overflow = 'hidden';
+  }
+
   if (activeLang.value === 'traditional') {
     convertDOM(true);
   }
@@ -1217,5 +1243,60 @@ body * {
   .footer-records span {
     margin: 0;
   }
+
+}
+
+
+
+/* 在style中添加以下样式 */
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.popup-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 80%;
+  width: 400px;
+  text-align: center;
+}
+
+.popup-content h3 {
+  font-size: 22px;
+  color: #1D953F;
+  margin-bottom: 15px;
+}
+
+.popup-content p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.popup-button {
+  background-color: #1D953F;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-button:hover {
+  background-color: #167530;
 }
 </style>
