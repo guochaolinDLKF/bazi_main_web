@@ -1,22 +1,22 @@
 <template>
   <div class="container">
 
-    <div v-if="showAlertPopup" class="popup-mask">
-      <div class="popup-container">
-        <div class="popup-content">
-          <h3>重要通知</h3>
-          <p>请访问我们的新官网获取更多服务</p>
-        </div>
-        <button @click="redirectToNewPage" class="popup-button">前往新页面</button>
-      </div>
-    </div>
+    <!-- <div v-if="showAlertPopup" class="popup-mask">
+     <div class="popup-container">
+       <div class="popup-content">
+         <h3>重要通知</h3>
+         <p>请访问我们的新官网获取更多服务</p>
+       </div>
+       <button @click="redirectToNewPage" class="popup-button">前往新页面</button>
+     </div>
+   </div>-->
 
     <!-- 顶部导航栏 - 修正为三栏布局 -->
     <header class="header">
 
       <!-- 左侧标题 -->
       <div class="nav-left">
-        <div class="main-title-small">易德八字</div>
+        <div class="main-title-small">易德自在</div>
       </div>
 
 
@@ -56,7 +56,33 @@
     <main class="main-content">
       <div v-if="currentPage === 'home'" class="home-page">
         <div class="content-wrapper">
-          <div class="main-title">易德八字</div>
+          <div class="main-title">易德</div>
+
+          <div class="product-description">
+            <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
+            <h3 class="description-title1">七大功能</h3>
+            <p>1. 安全可靠的云存储系统，随时回溯命例分析</p>
+            <p>2. 默认启用真太阳时，确保排盘科学准确</p>
+            <p>3. 内嵌专业知识提示系统，辅助深度解盘</p>
+            <p>4. 吉凶事件日志记录，构建个人命运数据库</p>
+            <p>5. 集成权威命理古籍原文，边排盘边参详</p>
+            <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
+            <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
+
+
+          </div>
+          <div class="product-image-container">
+            <img
+                src="/icons/product.png"
+                alt="易德产品界面展示"
+                class="product-image"
+                :style="{
+                  width: '1280px',
+                  height: '720px'
+                }"
+            />
+          </div>
+
         </div>
         <div class="button-container">
           <div class="platform-buttons">
@@ -124,6 +150,16 @@
         </div> -->
 
         <div class="white-rectangle">
+
+          <div class="company-info-row">
+            <div class="company-address">地址：北京市朝阳区东三环南路98号1幢14层1707</div>
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="company-email">邮箱：ydzzcc@163.com</div>
+          </div>
+
           <div class="qr-code-container">
             <div class="qr-code-item">
               <img src="/icons/ios-qr.png" alt="微信客服二维码1" class="qr-code-image"/>
@@ -172,11 +208,11 @@
         <span class="separator">|</span>
         <a @click="showRightsStatement">权利声明</a>
       </div>
-      <div class="footer-records">
+      <!--<div class="footer-records">
         <span>京网安备XXXXX号</span>
         <span>京ICP备XXXXXXXX号</span>
         <span>京网文 XXXXX号</span>
-      </div>
+      </div>-->
     </footer>
   </div>
 
@@ -226,9 +262,9 @@ const setActiveLang = (lang) => {
 // 生命周期钩子
 onMounted(async () => {
 
-  if (showAlertPopup.value) {
-    document.body.style.overflow = 'hidden';
-  }
+  //if (showAlertPopup.value) {
+  // document.body.style.overflow = 'hidden';
+  //}
 
   if (activeLang.value === 'traditional') {
     convertDOM(true);
@@ -281,15 +317,15 @@ const platforms = reactive([
   }
 ]);
 
-const saveVisitInfo = async ()=>{
+const saveVisitInfo = async () => {
   var cfg = configData.value;
-  var url =  "http://" + cfg.address+"/down_info/visit_page";
+  var url = "http://" + cfg.address + "/down_info/visit_page";
   //console.log(url);
   await AppService.getRequest(url);
 };
-const saveDownInfo = async (platform)=>{
+const saveDownInfo = async (platform) => {
   var cfg = configData.value;
-  var url =  "http://" + cfg.address+"/down_info/down_info?downPlatform="+platform;
+  var url = "http://" + cfg.address + "/down_info/down_info?downPlatform=" + platform;
   //console.log(url);
   await AppService.getRequest(url);
 };
@@ -438,9 +474,12 @@ onBeforeUnmount(() => {
   // 移除视频事件监听
   const video = videoPlayer.value;
   if (video) {
-    video.removeEventListener('play', () => {});
-    video.removeEventListener('pause', () => {});
-    video.removeEventListener('ended', () => {});
+    video.removeEventListener('play', () => {
+    });
+    video.removeEventListener('pause', () => {
+    });
+    video.removeEventListener('ended', () => {
+    });
   }
 });
 
@@ -448,7 +487,7 @@ const showPrivacyPolicy = () => {
   // 这里可以实现隐私政策的展示逻辑
   console.log('显示隐私政策');
   // 实际应用中可能是:
-   window.open('/src/about/privacy.html');
+  window.open('/src/about/privacy.html');
   // 或者显示一个模态框
 };
 
@@ -463,6 +502,85 @@ const showRightsStatement = () => {
 </script>
 
 <style scoped>
+
+.product-image-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  object-fit: contain;
+}
+
+.description-title1 {
+  font-size: 30px;
+  font-weight: 600;
+  color: #26B74F;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+}
+.description-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #5EA371;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* 添加底部边框，与微信风格一致 */
+}
+.product-description {
+  width: 40%;
+  margin: 20px auto 30px;
+  text-align: left;
+  color: #000000;
+  line-height: 1.6;
+}
+.product-description p {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.product-description p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 1200px) {
+  .product-description{
+    width: 40%;
+  }
+}
+
+@media (max-width: 900px) {
+  .product-description{
+    width: 40%;
+  }
+
+  .product-image {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .product-description{
+    width: 70%;
+  }
+
+  .description-title {
+    font-size: 16px;
+  }
+
+  .product-description p {
+    font-size: 14px;
+  }
+}
+
 body * {
   transition: opacity 0.3s ease;
 }
@@ -665,7 +783,7 @@ body * {
   transition: top 0.4s ease; /* 标题位置变化过渡 */
 
   margin-top: 120px; /* 可根据需要添加间距 */
-  margin-bottom: 300px;
+  margin-bottom: 100px;
 }
 
 /* 窄屏时上移标题 */
@@ -1153,14 +1271,49 @@ body * {
   background-color: #008000; /* 绿色 */
   z-index: 0; /* 确保层级 */
 }
+
 .white-rectangle {
-  width: 100vw; /* 页面宽度 */
-  height: 120px; /* 指定高度 */
-  background-color: white; /* 白色背景 */
-  margin-top: 40px; /* 与视频容器的间距保持一致 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  min-height: 160px;
+  background-color: white;
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+.company-info-row {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.company-address,
+.company-email {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+.divider {
+  margin: 0 15px;
+  color: #999;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+  .company-address,
+  .company-email {
+    font-size: 12px;
+  }
+
+  .divider {
+    margin: 0 8px;
+  }
 }
 
 .qr-code-container {
@@ -1185,9 +1338,11 @@ body * {
   object-fit: contain;
   margin-bottom: 10px;
 }
-.qr-code-text{
+
+.qr-code-text {
   font-size: 10px;
 }
+
 /* 确保主内容区域有足够空间 */
 .main-content {
   padding-bottom: 0; /* 增加底部内边距确保内容不被绿色区域覆盖 */
@@ -1245,7 +1400,6 @@ body * {
   }
 
 }
-
 
 
 /* 在style中添加以下样式 */
