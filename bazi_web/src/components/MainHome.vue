@@ -56,32 +56,32 @@
     <main class="main-content">
       <div v-if="currentPage === 'home'" class="home-page">
         <div class="content-wrapper">
-          <div class="main-title">易德</div>
+          <div class="main-title">易德八字</div>
 
-          <div class="product-description">
-            <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
-            <h3 class="description-title1">七大功能</h3>
-            <p>1. 安全可靠的云存储系统，随时回溯命例分析</p>
-            <p>2. 默认启用真太阳时，确保排盘科学准确</p>
-            <p>3. 内嵌专业知识提示系统，辅助深度解盘</p>
-            <p>4. 吉凶事件日志记录，构建个人命运数据库</p>
-            <p>5. 集成权威命理古籍原文，边排盘边参详</p>
-            <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
-            <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
+          <!--  <div class="product-description">
+              <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
+              <h3 class="description-title1">七大功能</h3>
+              <p>1. 安全可靠的云存储系统，随时回溯命例分析</p>
+              <p>2. 默认启用真太阳时，确保排盘科学准确</p>
+              <p>3. 内嵌专业知识提示系统，辅助深度解盘</p>
+              <p>4. 吉凶事件日志记录，构建个人命运数据库</p>
+              <p>5. 集成权威命理古籍原文，边排盘边参详</p>
+              <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
+              <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
 
 
-          </div>
-          <div class="product-image-container">
-            <img
-                src="/icons/product.png"
-                alt="易德产品界面展示"
-                class="product-image"
-                :style="{
-                  width: '1280px',
-                  height: '720px'
-                }"
-            />
-          </div>
+            </div>-->
+          <!-- <div class="product-image-container">
+             <img
+                 src="/icons/product.png"
+                 alt="易德产品界面展示"
+                 class="product-image"
+                 :style="{
+                   width: '1280px',
+                   height: '720px'
+                 }"
+             />
+           </div>-->
 
         </div>
         <div class="button-container">
@@ -208,11 +208,20 @@
         <span class="separator">|</span>
         <a @click="showRightsStatement">权利声明</a>
       </div>
-      <!--<div class="footer-records">
-        <span>京网安备XXXXX号</span>
-        <span>京ICP备XXXXXXXX号</span>
-        <span>京网文 XXXXX号</span>
-      </div>-->
+      <div class="footer-records">
+
+        <span>ICP证：</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;">京ICP备2025146375号-1</a>
+        <span></span>
+        <a href="https://www.beian.gov.cn/" target="_blank">
+          <img class="footer-auth-icon" src="/icons/gongan.png">
+          <span style="color:#939393;">京公网安备 xxxxxxxxx号</span>
+        </a>
+        <span></span>
+        <p>
+          Copyright ©2025-2025 <a href="/" class="red">易德八字</a>. All Right Reserved.
+        </p>
+      </div>
     </footer>
   </div>
 
@@ -220,7 +229,6 @@
 </template>
 
 <script setup>
-// 修复：添加响应式状态管理
 import {ref, onMounted, onBeforeUnmount, reactive} from 'vue';
 import {convertDOM} from './../zhConverter';
 import {AppService} from './AppService';
@@ -319,27 +327,27 @@ const platforms = reactive([
 
 const saveVisitInfo = async () => {
   var cfg = configData.value;
-  var url = "http://" + cfg.address + "/down_info/visit_page";
+  var url = cfg.optionUrl + "/game/visit_page";
   //console.log(url);
   await AppService.getRequest(url);
 };
 const saveDownInfo = async (platform) => {
   var cfg = configData.value;
-  var url = "http://" + cfg.address + "/down_info/down_info?downPlatform=" + platform;
+  var url = cfg.optionUrl + "/game/down_info?downPlatform=" + platform;
   //console.log(url);
   await AppService.getRequest(url);
 };
 const requestAndroidCfg = async () => {
   try {
     var cfg = configData.value;
-    var url = "http://" + cfg.address + "/cfg/Android/" + cfg.mode + "/buildList.json";
-    //console.log(url)
+    var url = cfg.address + "/package/Android/" + cfg.mode + "/buildList.json";
+    console.log(url)
     const response = await AppService.getRequest(url);
 
-    url = "http://" + cfg.address + "/cfg/Android" + "/" +
+    url = cfg.address + "/package/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
-    //console.log(url)
+    console.log(url)
     updatePlatformLink("Android", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
@@ -349,13 +357,13 @@ const requestAndroidCfg = async () => {
 const requestWindowsCfg = async () => {
   try {
     var cfg = configData.value;
-    var url = "http://" + cfg.address + "/package/Windows/" + cfg.mode + "/buildList.json";
-    //console.log(url)
+    var url = cfg.address + "/package/Windows/" + cfg.mode + "/buildList.json";
+    console.log(url)
     const response = await AppService.getRequest(url);
-    url = "http://" + cfg.address + "/package/Windows" + "/" +
+    url = cfg.address + "/package/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
-    //console.log(url)
+    console.log(url)
     updatePlatformLink("Windows", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
@@ -487,17 +495,17 @@ const showPrivacyPolicy = () => {
   // 这里可以实现隐私政策的展示逻辑
   console.log('显示隐私政策');
   // 实际应用中可能是:
-  window.open('/src/about/privacy.html');
+  window.open('/about/privacy.html');
   // 或者显示一个模态框
 };
 
 const showServiceAgreement = () => {
-  window.open('/src/about/agreement.html');
+  window.open('/about/agreement.html');
 };
 
 const showRightsStatement = () => {
   console.log('显示权利声明');
-  window.open('/src/about/law.html');
+  window.open('/about/law.html');
 };
 </script>
 
@@ -783,7 +791,7 @@ body * {
   transition: top 0.4s ease; /* 标题位置变化过渡 */
 
   margin-top: 120px; /* 可根据需要添加间距 */
-  margin-bottom: 100px;
+  margin-bottom: 400px;
 }
 
 /* 窄屏时上移标题 */

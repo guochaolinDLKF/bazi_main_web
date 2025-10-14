@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/ali-oss": "^6.16.11",
+    "ali-oss": "^6.23.0",
+    "axios": "^1.12.2",
     "vue": "^3.5.17"
   },
   "devDependencies": {
