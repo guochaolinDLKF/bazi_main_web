@@ -246,7 +246,7 @@ const showAlertPopup = ref(true); // 控制弹窗显示
 const redirectToNewPage = () => {
   showAlertPopup.value = false;
   document.body.style.overflow = ''; // 恢复页面滚动
-  window.location.href = 'http://47.100.111.124:8912/index.html'; // 替换为目标URL
+  window.location.href = 'https://www.ydzz.cc/index.html'; // 替换为目标URL
 };
 
 
@@ -341,13 +341,13 @@ const requestAndroidCfg = async () => {
   try {
     var cfg = configData.value;
     var url = cfg.address + "/package/Android/" + cfg.mode + "/buildList.json";
-    console.log(url)
+    //console.log(url)
     const response = await AppService.getRequest(url);
 
     url = cfg.address + "/package/Android" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
-    console.log(url)
+    //console.log(url)
     updatePlatformLink("Android", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
@@ -358,12 +358,12 @@ const requestWindowsCfg = async () => {
   try {
     var cfg = configData.value;
     var url = cfg.address + "/package/Windows/" + cfg.mode + "/buildList.json";
-    console.log(url)
+    //console.log(url)
     const response = await AppService.getRequest(url);
     url = cfg.address + "/package/Windows" + "/" +
         response.curVersionInfo.buildEnv + "/" + response.curVersionInfo.buildVersion + "/" +
         response.curVersionInfo.fileList[0].fileName;
-    console.log(url)
+    //console.log(url)
     updatePlatformLink("Windows", url)
   } catch (error) {
     console.error('在MainHome中捕获到错误:', error);
