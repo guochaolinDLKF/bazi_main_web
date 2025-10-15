@@ -151,14 +151,14 @@
 
         <div class="white-rectangle">
 
-          <div class="company-info-row">
-            <div class="company-address">地址：北京市朝阳区东三环南路98号1幢14层1707</div>
-            <div class="divider"></div>
-            <div class="divider"></div>
-            <div class="divider"></div>
-            <div class="divider"></div>
-            <div class="company-email">邮箱：ydzzcc@163.com</div>
-          </div>
+          <!-- <div class="company-info-row">
+             <div class="company-address">地址：北京市朝阳区东三环南路98号1幢14层1707</div>
+             <div class="divider"></div>
+             <div class="divider"></div>
+             <div class="divider"></div>
+             <div class="divider"></div>
+             <div class="company-email">邮箱：ydzzcc@163.com</div>
+           </div>-->
 
           <div class="qr-code-container">
             <div class="qr-code-item">
