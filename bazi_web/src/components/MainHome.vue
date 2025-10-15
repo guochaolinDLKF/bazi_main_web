@@ -213,9 +213,9 @@
         <span>ICP证：</span>
         <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;">京ICP备2025146375号-1</a>
         <span></span>
-        <a href="https://www.beian.gov.cn/" target="_blank">
+        <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010502057604" rel="noreferrer"  target="_blank">
           <img class="footer-auth-icon" src="/icons/gongan.png">
-          <span style="color:#939393;">京公网安备 xxxxxxxxx号</span>
+          <span style="color:#939393;">京公网安备11010502057604号</span>
         </a>
         <span></span>
         <p>
