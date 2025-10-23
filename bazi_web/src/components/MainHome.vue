@@ -242,6 +242,21 @@ const currentPage = ref('home'); // 默认显示首页
 
 const showAlertPopup = ref(true); // 控制弹窗显示
 
+
+const clearAllCache = () => {
+  try {
+    // 清除 localStorage
+    localStorage.clear();
+    // 清除 sessionStorage
+    sessionStorage.clear();
+
+    //console.log('所有缓存数据已清除');
+  } catch (error) {
+    console.error('清除缓存时出错:', error);
+  }
+};
+
+
 // 跳转到新页面
 const redirectToNewPage = () => {
   showAlertPopup.value = false;
@@ -269,6 +284,8 @@ const setActiveLang = (lang) => {
 };
 // 生命周期钩子
 onMounted(async () => {
+
+  clearAllCache();
 
   //if (showAlertPopup.value) {
   // document.body.style.overflow = 'hidden';
