@@ -58,7 +58,7 @@
         <div class="content-wrapper">
           <div class="main-title">易德八字</div>
 
-          <!--  <div class="product-description">
+            <div class="product-description">
               <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
               <h3 class="description-title1">七大功能</h3>
               <p>1. 安全可靠的云存储系统，随时回溯命例分析</p>
@@ -70,8 +70,8 @@
               <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
 
 
-            </div>-->
-          <!-- <div class="product-image-container">
+            </div>
+          <div class="product-image-container">
              <img
                  src="/icons/product.png"
                  alt="易德产品界面展示"
@@ -81,7 +81,7 @@
                    height: '720px'
                  }"
              />
-           </div>-->
+           </div>
 
         </div>
         <div class="button-container">
@@ -123,7 +123,15 @@
           </div>
         </div>
         <!-- 绿色区域 - 移动到按钮和视频之间 -->
-        <div class="bottom-green-area"></div>
+        <div class="bottom-green-area">
+          <div class="company-intro">
+            <div class="company-intro-title">公司简介</div>
+            <div class="company-intro-text">
+              易德自在（北京）文化科技有限公司，2025年注册于北京，专注于将传统八字命理与现代科技深度融合，打造真正服务于专业命理师与研究者的高效工具的企业。
+              核心产品《易德》八字排盘系统，基于真太阳时与系统化命理逻辑构建，提供精准排盘、运势推演与命例管理能力，让复杂的命理分析变得更清晰、更高效、更可沉淀。
+            </div>
+          </div>
+        </div>
 
 
         <!-- 视频播放组件 -->
@@ -151,14 +159,14 @@
 
         <div class="white-rectangle">
 
-          <!-- <div class="company-info-row">
+           <div class="company-info-row">
              <div class="company-address">地址：北京市朝阳区东三环南路98号1幢14层1707</div>
              <div class="divider"></div>
              <div class="divider"></div>
              <div class="divider"></div>
              <div class="divider"></div>
              <div class="company-email">邮箱：ydzzcc@163.com</div>
-           </div>-->
+           </div>
 
           <div class="qr-code-container">
             <div class="qr-code-item">
@@ -1295,8 +1303,25 @@ body * {
   height: 33.33vh; /* 保持高度 */
   background-color: #008000; /* 绿色 */
   z-index: 0; /* 确保层级 */
+  position: relative;
+}
+.company-intro {
+  padding: 20px 30px;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+/* 标题样式 */
+.company-intro-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
+/* 正文样式 */
+.company-intro-text {
+  font-size: 16px;
+  line-height: 1.8;
+}
 .white-rectangle {
   display: flex;
   flex-direction: column;
@@ -1477,5 +1502,21 @@ body * {
 
 .popup-button:hover {
   background-color: #167530;
+}
+.company-intro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 60%;
+  max-width: 800px;
+
+  text-align: center;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.8;
+
+  pointer-events: none; /* 不影响点击 */
 }
 </style>
