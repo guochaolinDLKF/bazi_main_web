@@ -283,6 +283,35 @@ const fetchConfig = async () => {
     console.error('配置文件读取错误:', error);
   }
 };
+/**获取设备信息*/
+const getDeviceInfo = () => {
+
+  const ua = navigator.userAgent || "";
+
+  return {
+
+    userAgent: ua,
+
+    isAndroid: /Android/i.test(ua),
+
+    isIOS: /iPhone|iPad|iPod/i.test(ua),
+
+    isMobile: /Android|iPhone|iPad|iPod|Mobile/i.test(ua),
+
+    brand:
+        /HUAWEI|HONOR/i.test(ua) ? "huawei" :
+
+            /Xiaomi|Mi|Redmi/i.test(ua) ? "xiaomi" :
+
+                /OPPO/i.test(ua) ? "oppo" :
+
+                    /vivo/i.test(ua) ? "vivo" :
+
+                        /Samsung/i.test(ua) ? "samsung" :
+
+                            "unknown"
+  };
+};
 
 // 语言切换方法
 const setActiveLang = (lang) => {
@@ -407,10 +436,85 @@ const handleClick = (platform, event) => {
     event.preventDefault(); // 阻止默认行为
     return; // 不执行后续逻辑
   }
+  if (platform.name === "Android") {
+
+    const device = getDeviceInfo();
+
+    console.log("当前设备信息:", device);
+
+    let marketUrl = "";
+
+    // 你的安卓包名
+    const packageName = "com.ydzz.bazi";
+
+    // 华为应用市场
+    if (device.brand === "huawei") {
+      marketUrl =
+          `https://url.cloud.huawei.com/AdWCjYkeLC?shareTo=qrcode`;
+    }
+
+    // 小米应用商店
+    else if (device.brand === "xiaomi") {
+
+      marketUrl =
+          `https://m.malink.cn/s/jU77bi`;
+    }
+
+    // // OPPO应用商店
+    // else if (device.brand === "oppo") {
+    //
+    //   marketUrl =
+    //       `oppomarket://details?packagename=${packageName}`;
+    // }
+    //
+    // // vivo应用商店
+    // else if (device.brand === "vivo") {
+    //
+    //   marketUrl =
+    //       `vivomarket://details?id=${packageName}`;
+    // }
+    //
+    // // 三星应用商店
+    // else if (device.brand === "samsung") {
+    //
+    //   marketUrl =
+    //       `samsungapps://ProductDetail/${packageName}`;
+    // }
+    // 如果识别到品牌
+    if (marketUrl) {
+
+      try {
+
+        // 尝试打开应用商店
+        window.location.href = marketUrl;
+
+        // 兜底方案：
+        // 如果商店打不开，则1.5秒后下载APK
+        setTimeout(() => {
+
+          saveDownInfo(platform.name);
+
+          window.open(platform.link, "_blank");
+
+        }, 1500);
+
+      } catch (e) {
+
+        console.error("打开应用商店失败:", e);
+
+        saveDownInfo(platform.name);
+
+        window.open(platform.link, "_blank");
+      }
+
+      return;
+    }
+  }
+
   saveDownInfo(platform.name);
   // 其他平台正常跳转
   window.open(platform.link, '_blank');
-}
+};
 // 新增视频相关状态
 const videoPlayer = ref(null);
 const videoSource = ref('/videos/01-周易大学-静心面相.mp4'); // 假视频地址
