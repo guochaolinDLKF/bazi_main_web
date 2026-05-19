@@ -11,16 +11,12 @@
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
-/* body 内元素过渡动画 */
-body * {
-  transition: opacity 0.3s ease;
-}
-
-/* 页面根元素占满视口 */
+/* 页面根元素占满视口，强制白色背景 */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background: #fff;
 }
 
 body {

@@ -184,4 +184,71 @@ defineEmits<{
     font-size: 13px;
   }
 }
+
+/* 窄屏切换为弹性布局，避免绝对定位重叠 */
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 12px;
+    justify-content: space-between;
+  }
+
+  .nav-left {
+    position: static;
+    transform: none;
+    left: auto;
+    order: 1;
+  }
+
+  .main-title-small {
+    font-size: 15px;
+  }
+
+  .nav-center {
+    position: static;
+    transform: none;
+    left: auto;
+    top: auto;
+    order: 2;
+    gap: 15px;
+  }
+
+  .nav-right {
+    position: static;
+    transform: none;
+    left: auto;
+    top: auto;
+    order: 3;
+  }
+
+  .lang-container {
+    padding: 3px 5px;
+    border-radius: 14px;
+  }
+
+  .lang-item {
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+}
+
+/* 超窄屏 */
+@media (max-width: 360px) {
+  .header {
+    padding: 10px 8px;
+  }
+
+  .main-title-small {
+    font-size: 14px;
+  }
+
+  .nav-item {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .lang-item {
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+}
 </style>

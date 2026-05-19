@@ -240,7 +240,6 @@ defineProps<{
 
 @media (max-width: 1000px) {
   .button-container {
-    bottom: 10%;
     min-height: 180px;
   }
   .platform-buttons {
@@ -251,19 +250,76 @@ defineProps<{
 
 @media (max-width: 800px) {
   .platform-buttons {
-    gap: 30px;
-    row-gap: 30px;
+    gap: 25px;
+    row-gap: 25px;
   }
 }
 
 @media (max-width: 600px) {
   .button-container {
-    bottom: 25%;
-    min-height: 240px;
+    min-height: unset;
+    padding-top: 20px;
   }
   .platform-buttons {
-    gap: 20px;
-    row-gap: 20px;
+    gap: 16px;
+    row-gap: 16px;
+    padding: 0 12px;
+  }
+  .button {
+    width: 90px;
+    height: 90px;
+  }
+  .icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 8px;
+  }
+  .button span {
+    font-size: 12px;
+  }
+  .download-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .download-text {
+    font-size: 16px;
+  }
+  .dev-message {
+    font-size: 12px;
+  }
+  .qr-image {
+    width: 80px;
+    height: 80px;
+  }
+  .download-overlay {
+    border-radius: 6px;
+  }
+}
+
+/* 超窄屏：确保 3+2 按钮排列正常 */
+@media (max-width: 400px) {
+  .platform-buttons {
+    gap: 12px;
+    row-gap: 12px;
+  }
+  .button {
+    width: 76px;
+    height: 76px;
+  }
+  .icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 6px;
+  }
+  .button span {
+    font-size: 11px;
+  }
+  .download-text {
+    font-size: 14px;
+  }
+  .download-icon {
+    width: 34px;
+    height: 34px;
   }
 }
 </style>

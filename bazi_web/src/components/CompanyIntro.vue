@@ -41,7 +41,6 @@
   pointer-events: none; /* 不影响下层交互 */
   padding: 20px 30px;
   border-radius: 10px;
-  backdrop-filter: blur(4px); /* 背景虚化效果 */
 }
 
 /* 标题 */
@@ -55,5 +54,42 @@
 .company-intro-text {
   font-size: 16px;
   line-height: 1.8;
+}
+
+/* 响应式：手机端加宽文字区域 */
+@media (max-width: 600px) {
+  .bottom-green-area {
+    height: 40vh;
+  }
+
+  .company-intro {
+    width: 85%;
+    font-size: 14px;
+    padding: 16px 20px;
+  }
+
+  .company-intro-title {
+    font-size: 18px;
+  }
+
+  .company-intro-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .company-intro {
+    width: 90%;
+    font-size: 13px;
+    padding: 12px 16px;
+  }
+
+  .company-intro-title {
+    font-size: 16px;
+  }
+
+  .company-intro-text {
+    font-size: 13px;
+  }
 }
 </style>

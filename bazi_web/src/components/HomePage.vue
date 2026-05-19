@@ -198,8 +198,32 @@ defineProps<{
   .description-title { font-size: 16px; }
   .product-description p { font-size: 14px; }
   .main-title {
-    margin-top: 80px;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    font-size: 32px;
+  }
+  .product-image-container {
     margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .main-title {
+    margin-top: 40px;
+    margin-bottom: 24px;
+    font-size: 28px;
+  }
+  .description-title {
+    font-size: 14px;
+  }
+  .description-title1 {
+    font-size: 22px;
+  }
+  .product-description p {
+    font-size: 13px;
+  }
+  .product-image-container {
+    margin-bottom: 30px;
   }
 }
 </style>

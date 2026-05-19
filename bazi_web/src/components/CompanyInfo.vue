@@ -93,14 +93,51 @@
   font-size: 10px;
 }
 
-/* 窄屏适配：缩小字号和间距 */
+/* 窄屏适配：地址和邮箱纵向排列、居中 */
 @media (max-width: 600px) {
+  .white-rectangle {
+    padding: 16px 16px;
+  }
+
+  .company-info-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
   .company-address,
   .company-email {
     font-size: 12px;
+    white-space: normal;
+    text-align: center;
+    width: 100%;
   }
+
   .divider {
-    margin: 0 8px;
+    display: none;
+  }
+
+  .qr-code-container {
+    gap: 40px;
+  }
+
+  .qr-code-image {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* 超窄屏 */
+@media (max-width: 360px) {
+  .company-address,
+  .company-email {
+    font-size: 11px;
+  }
+
+  .qr-code-image {
+    width: 56px;
+    height: 56px;
   }
 }
 </style>
