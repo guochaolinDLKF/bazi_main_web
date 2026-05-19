@@ -8,30 +8,74 @@
     <meta name="keywords" content="法律声明,易德八字,八字,易德,传统文化,四柱八字,四柱">
     <title>法律声明 - 易德八字官网</title>
     <style>
-        /* 全局页面左右留白 */
-        body {
-            margin: 0 40px;
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* 确保页面主体内容高度足够，以避免页脚遮挡 */
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* 使页面至少占满整个视口高度 */
-            margin: 0;
+            min-height: 100vh;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.8;
+            background-color: #f5f5f5;
         }
 
         .site-main-wrapper {
-            flex: 1; /* 让主要内容区域占据所有可用空间 */
+            flex: 1;
         }
 
-        /* 页脚包装样式 */
+        /* 内容主体区域：居中 + 左右边距 */
+        .about-law-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+
+        /* 段落首行缩进 */
+        .about-law-wrapper p {
+            text-indent: 2em;
+            margin-bottom: 1em;
+        }
+
+        /* 有序列表 */
+        .about-law-wrapper ol {
+            margin: 1em 0;
+            padding-left: 2em;
+            list-style-position: outside;
+        }
+
+        .about-law-wrapper ol li {
+            margin-bottom: 1.2em;
+            line-height: 1.8;
+        }
+
+        .about-law-wrapper ol li p {
+            margin-bottom: 0;
+            text-indent: 0;
+        }
+
+        /* 链接 */
+        .about-law-wrapper a {
+            color: #158cc3;
+            text-decoration: none;
+        }
+
+        .about-law-wrapper a:hover {
+            text-decoration: underline;
+        }
+
+        /* 页脚 */
         .site-footer-wrapper {
             width: 100%;
-            margin-top: auto; /* 确保页脚被推到底部 */
+            margin-top: auto;
+            background-color: #fff;
         }
 
-        /* 页脚内容样式 */
         .site-footer {
             padding: 20px 0;
             text-align: center;
@@ -72,15 +116,18 @@
             text-decoration: underline;
         }
 
-        /* ICP备案号与公网备案号之间的空白 */
         .site-copyright a.mr {
             margin-right: 20px;
         }
 
-        /* 响应式设计：小屏幕设备 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            body {
-                margin: 0 20px;
+            .about-law-wrapper {
+                padding: 30px 20px;
+            }
+
+            .about-law-wrapper ol {
+                padding-left: 1.5em;
             }
 
             .site-footer {
@@ -94,6 +141,16 @@
 
             .site-copyright p {
                 font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-law-wrapper {
+                padding: 20px 16px;
+            }
+
+            .about-law-wrapper p {
+                text-indent: 1.5em;
             }
         }
     </style>
@@ -111,8 +168,8 @@
                             《易德八字》官方网站是易德自在（北京）文化科技有限公司（以下简称"本公司"）的产品官方网站。
                         </p>
 
-                        <p>
-                            <span class="big">如</span>果您要访问和使用《易德八字》官方网站（以下简称"本网站"），
+        <p>
+            如果您要访问和使用《易德八字》官方网站（以下简称"本网站"），
                             您必须接受本声明中所列出的条款及其后的有关通告、声明，
                             并遵守有关法律、法规与商业规则。
                             一旦您访问或使用了本网站，即表示您同意并接受了本声明所列示的下列条款。

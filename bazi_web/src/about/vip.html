@@ -5,56 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>易德VIP会员服务协议</title>
     <style>
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: "Microsoft YaHei", Arial, sans-serif;
-            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             color: #333;
+            line-height: 1.8;
+            background-color: #f5f5f5;
+        }
+
+        .site-main-wrapper {
+            flex: 1;
+        }
+
+        /* 内容主体区域：居中 + 左右边距 */
+        .vip-content {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 32px;
         }
-        h1 {
+
+        /* 段落首行缩进 */
+        .vip-content p {
+            text-indent: 2em;
+            margin-bottom: 1em;
+        }
+
+        /* 标题 */
+        .vip-content h1 {
             text-align: center;
             font-size: 24px;
             margin-bottom: 30px;
         }
-        h2 {
+
+        .vip-content h2 {
             font-size: 18px;
-            margin-top: 25px;
-            margin-bottom: 10px;
+            margin-top: 2em;
+            margin-bottom: 1em;
             border-left: 4px solid #4cde42;
             padding-left: 10px;
         }
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
+
+        .vip-content h3 {
+            font-size: 16px;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
         }
-        ul {
-            padding-left: 20px;
+
+        /* 列表 */
+        .vip-content ul {
+            margin-left: 2em;
+            margin-bottom: 1em;
         }
-        li {
-            margin-bottom: 10px;
+
+        .vip-content li {
+            margin-bottom: 0.5em;
+            line-height: 1.8;
         }
-        .important {
+
+        /* 重要提示加粗 */
+        .vip-content .important {
             font-weight: bold;
         }
-        .contact {
+
+        /* 联系方式 */
+        .vip-content .contact {
             background-color: #f5f5f5;
             padding: 15px;
             border-radius: 5px;
             margin-top: 20px;
         }
 
-        /* 页脚包装样式 */
-        .site-footer-wrapper {
-            width: 100%;
-            margin-top: auto; /* 确保页脚被推到底部 */
+        .vip-content .contact p {
+            text-indent: 0;
+            margin-bottom: 0;
         }
 
-        /* 页脚内容样式 */
+        /* 链接 */
+        .vip-content a {
+            color: #158cc3;
+            text-decoration: none;
+        }
+
+        .vip-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* 页脚 */
+        .site-footer-wrapper {
+            width: 100%;
+            margin-top: auto;
+            background-color: #fff;
+        }
+
         .site-footer {
             padding: 20px 0;
-            text-align: center; /* 添加此样式使页脚内容居中 */
+            text-align: center;
         }
 
         .site-footer nav {
@@ -77,14 +131,14 @@
         }
 
         .site-copyright {
-            text-align: center; /* 添加此样式使版权信息居中 */
+            text-align: center;
         }
 
         .site-copyright p {
             margin: 5px 0;
             color: #999;
             font-size: 14px;
-            text-align: center; /* 确保段落文本也居中 */
+            text-align: center;
         }
 
         .site-copyright a {
@@ -97,15 +151,18 @@
             text-decoration: underline;
         }
 
-        /* ICP备案号与公网备案号之间的空白 */
         .site-copyright a.mr {
             margin-right: 20px;
         }
 
-        /* 响应式设计：小屏幕设备 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            body {
-                margin: 0 20px;
+            .vip-content {
+                padding: 30px 20px;
+            }
+
+            .vip-content h1 {
+                font-size: 22px;
             }
 
             .site-footer {
@@ -122,17 +179,24 @@
             }
         }
 
-        /* 隐私条款内容样式 */
-        .about-privacy-wrapper  h4  {font-size:1.15em;margin-top:5em;margin-bottom:1.5em;}
-        .about-privacy-wrapper  h5  {font-size:1em;}
-        .about-privacy-wrapper  ul  {margin-left:.75em;list-style:none;}
-        .about-privacy-wrapper  ul li {line-height:2.5em;}
-        .about-privacy-wrapper  p {padding-left:0;}
-        .about-privacy-wrapper  .p2 {padding-left:2em;}
-        .about-privacy-wrapper  a {color:#158cc3;}
+        @media (max-width: 480px) {
+            .vip-content {
+                padding: 20px 16px;
+            }
+
+            .vip-content p {
+                text-indent: 1.5em;
+            }
+
+            .vip-content ul {
+                margin-left: 1.5em;
+            }
+        }
     </style>
 </head>
 <body>
+<div class="site-main-wrapper">
+<div class="vip-content">
 <h1>易德VIP会员服务协议</h1>
 
 <p>欢迎使用易德自在（北京）文化科技有限公司所开发的软件易德的VIP会员服务(该软件以下简称"本产品"或"易德")，为了保障您的权益，请在进行下一步操作前，详细阅读本协议的所有内容，特别是免除或限制责任以及加粗部分的条款。当您勾选《VIP会员服务协议》行为或其他具有类似含义的行为时，您的行为即表示您同意并签署了本协议，并同意遵守本协议中的约定。该协议构成您与易德达成的协议，具有法律效力。</p>
@@ -251,6 +315,9 @@
 
 <div class="contact">
     <p>如需咨询请联系我们：电子邮箱: ydzzcc@163.com</p>
+</div>
+
+</div>
 </div>
 
 <div class="site-footer-wrapper">

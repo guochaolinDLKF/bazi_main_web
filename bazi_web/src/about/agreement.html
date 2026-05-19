@@ -8,30 +8,83 @@
     <meta name="keywords" content="注册协议,易德八字,八字,易德,传统文化,四柱八字,四柱">
     <title>服务协议 - 易德八字官网</title>
     <style>
-        /* 全局页面左右留白 */
-        body {
-            margin: 0 40px;
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* 确保页面主体内容高度足够，以避免页脚遮挡 */
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* 使页面至少占满整个视口高度 */
-            margin: 0;
+            min-height: 100vh;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.8;
+            background-color: #f5f5f5;
         }
 
         .site-main-wrapper {
-            flex: 1; /* 让主要内容区域占据所有可用空间 */
+            flex: 1;
         }
 
-        /* 页脚包装样式 */
+        /* 内容主体区域：居中 + 左右边距 */
+        .agreement-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+
+        /* 段落首行缩进 */
+        .agreement-content p {
+            text-indent: 2em;
+            margin-bottom: 1em;
+        }
+
+        /* 标题 */
+        .agreement-content h3 {
+            font-size: 1.15em;
+            margin-top: 2em;
+            margin-bottom: 1em;
+        }
+
+        .agreement-content h3:first-child {
+            margin-top: 0;
+        }
+
+        /* 二级缩进段落 */
+        .agreement-content .p2 {
+            text-indent: 4em;
+        }
+
+        /* 版权声明 */
+        .agreement-copyright {
+            text-align: center;
+            margin-top: 2em;
+            padding-top: 1em;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* 链接 */
+        .agreement-content a {
+            color: #158cc3;
+            text-decoration: none;
+        }
+
+        .agreement-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* 页脚 */
         .site-footer-wrapper {
             width: 100%;
-            margin-top: auto; /* 确保页脚被推到底部 */
+            margin-top: auto;
+            background-color: #fff;
         }
 
-        /* 页脚内容样式 */
         .site-footer {
             padding: 20px 0;
             text-align: center;
@@ -72,15 +125,18 @@
             text-decoration: underline;
         }
 
-        /* ICP备案号与公网备案号之间的空白 */
         .site-copyright a.mr {
             margin-right: 20px;
         }
 
-        /* 响应式设计：小屏幕设备 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            body {
-                margin: 0 20px;
+            .agreement-content {
+                padding: 30px 20px;
+            }
+
+            .agreement-content h3 {
+                margin-top: 1.5em;
             }
 
             .site-footer {
@@ -94,6 +150,16 @@
 
             .site-copyright p {
                 font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .agreement-content {
+                padding: 20px 16px;
+            }
+
+            .agreement-content p {
+                text-indent: 1.5em;
             }
         }
     </style>
