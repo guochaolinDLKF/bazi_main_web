@@ -13,23 +13,23 @@ import { AppService } from '../utils/AppService'
 export function useAnalytics(configData: Ref<ConfigData | null>) {
   /**
    * 上报页面访问
-   * GET {optionUrl}/game/visit_page
+   * POST {optionUrl}/game/visit_page
    */
   const saveVisitInfo = async () => {
     if (!configData.value) return
     const url = configData.value.optionUrl + '/game/visit_page'
-    await AppService.getRequest(url)
+    await AppService.postRequest(url)
   }
 
   /**
    * 上报下载行为
-   * GET {optionUrl}/game/down_info?downPlatform={platform}
+   * POST {optionUrl}/game/down_info
    * @param platform 下载平台名称（如 "Android"、"Windows"）
    */
   const saveDownInfo = async (platform: string) => {
     if (!configData.value) return
-    const url = configData.value.optionUrl + '/game/down_info?downPlatform=' + encodeURIComponent(platform)
-    await AppService.getRequest(url)
+    const url = configData.value.optionUrl + '/game/down_info'
+    await AppService.postRequest(url, { downPlatform: platform })
   }
 
   return { saveVisitInfo, saveDownInfo }

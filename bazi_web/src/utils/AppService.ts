@@ -29,13 +29,14 @@ export class AppService {
 
   /**
    * 发起 POST 请求
-   * @param url 完整的请求地址
+   * @param url  完整的请求地址
+   * @param data 请求体数据（可选，默认空对象）
    * @returns 响应数据，失败时返回 null
    */
-  static async postRequest(url: string) {
+  static async postRequest(url: string, data: Record<string, unknown> = {}) {
     try {
       const response = await post<{}>(
-        url, {},
+        url, data,
         5000 // 5秒超时
       );
       return response.data;
