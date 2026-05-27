@@ -18,18 +18,25 @@ export function useAnalytics(configData: Ref<ConfigData | null>) {
   const saveVisitInfo = async () => {
     if (!configData.value) return
     const url = configData.value.optionUrl + '/game/visit_page'
-    await AppService.postRequest(url)
+    const result = await AppService.postRequest(url)
+    if (result === null) {
+      console.warn('[Analytics] 页面访问上报失败')
+    }
   }
 
   /**
    * 上报下载行为
-   * POST {optionUrl}/game/down_info
+   * POST {optionUrl}/game/down_info?downPlatform={platform}
+   * 参数格式与服务端 @RequestParam 对齐
    * @param platform 下载平台名称（如 "Android"、"Windows"）
    */
   const saveDownInfo = async (platform: string) => {
     if (!configData.value) return
-    const url = configData.value.optionUrl + '/game/down_info'
-    await AppService.postRequest(url, { downPlatform: platform })
+    const url = configData.value.optionUrl + '/game/down_info?downPlatform=' + encodeURIComponent(platform)
+    const result = await AppService.postRequest(url)
+    if (result === null) {
+      console.warn(`[Analytics] 下载上报失败 (${platform})`)
+    }
   }
 
   return { saveVisitInfo, saveDownInfo }

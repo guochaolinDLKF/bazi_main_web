@@ -42,7 +42,11 @@ export class AppService {
       return response.data;
     } catch (error) {
       if (error instanceof HttpError) {
-        console.error(`获取数据失败: ${error} - ${error.message}`);
+        console.error(`[POST] 请求失败 (${error.status}): ${url}`, error.message);
+      } else if (error instanceof Error) {
+        console.error(`[POST] 网络异常: ${url}`, error.message);
+      } else {
+        console.error(`[POST] 未知错误: ${url}`, error);
       }
       return null;
     }
