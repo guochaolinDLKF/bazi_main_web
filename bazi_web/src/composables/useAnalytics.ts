@@ -1,4 +1,4 @@
-import { type Ref } from 'vue'
+import type { Ref } from 'vue'
 import type { ConfigData } from '../types'
 import { AppService } from '../utils/AppService'
 
@@ -13,7 +13,7 @@ import { AppService } from '../utils/AppService'
 export function useAnalytics(configData: Ref<ConfigData | null>) {
   /**
    * 上报页面访问
-   * POST 到 {optionUrl}/game/visit_page
+   * GET {optionUrl}/game/visit_page
    */
   const saveVisitInfo = async () => {
     if (!configData.value) return
@@ -23,12 +23,12 @@ export function useAnalytics(configData: Ref<ConfigData | null>) {
 
   /**
    * 上报下载行为
-   * GET 到 {optionUrl}/game/down_info，携带平台参数
+   * GET {optionUrl}/game/down_info?downPlatform={platform}
    * @param platform 下载平台名称（如 "Android"、"Windows"）
    */
   const saveDownInfo = async (platform: string) => {
     if (!configData.value) return
-    const url = configData.value.optionUrl + '/game/down_info?downPlatform=' + platform
+    const url = configData.value.optionUrl + '/game/down_info?downPlatform=' + encodeURIComponent(platform)
     await AppService.getRequest(url)
   }
 

@@ -1,5 +1,5 @@
 import { reactive, type Ref } from 'vue'
-import type { ConfigData, Platform } from '../types'
+import type { ConfigData, Platform, BuildListResponse } from '../types'
 import { AppService } from '../utils/AppService'
 import { getDeviceInfo } from '../utils/device'
 
@@ -24,7 +24,7 @@ export function usePlatforms(
     { name: 'Android', id: 'android', icon: '/icons/android.png', link: 'https://default-android.com' },
     { name: 'Windows', id: 'windows', icon: '/icons/windows.png', link: 'https://default-windows.com' },
     { name: 'HarmonyOS', id: 'harmony', icon: '/icons/harmonyos.png', link: 'https://default-harmonyos.com' },
-    { name: 'iOS', id: 'ios', icon: '/icons/ios.png', link: 'https://default-harmonyos.com' },
+    { name: 'iOS', id: 'ios', icon: '/icons/ios.png', link: 'https://default-ios.com' },
     { name: 'MacOS', id: 'mac', icon: '/icons/macos.png', link: 'https://default-macos.com' },
   ])
 
@@ -37,11 +37,11 @@ export function usePlatforms(
 
   /**
    * 设置平台按钮悬停状态
-   * @param platform 平台 ID（harmony/ios/mac）
-   * @param isHover  是否正在悬停
+   * @param platformId 平台 ID（harmony/ios/mac）
+   * @param isHover    是否正在悬停
    */
-  const setHoverState = (platform: string, isHover: boolean) => {
-    hoverStates[platform] = isHover
+  const setHoverState = (platformId: string, isHover: boolean) => {
+    hoverStates[platformId] = isHover
   }
 
   /**
@@ -57,44 +57,26 @@ export function usePlatforms(
   }
 
   /**
-   * 从 OSS 获取 Android 最新版本构建信息
-   * 读取 buildList.json 后拼接出完整 APK 下载地址
+   * 从 OSS 获取最新版本构建信息并更新平台链接
+   * @param os 操作系统名称（Android / Windows）
    */
-  const requestAndroidCfg = async () => {
+  const requestBuildCfg = async (os: string) => {
     if (!configData.value) return
     try {
       const cfg = configData.value
-      // 1. 请求版本清单
-      const baseUrl = cfg.address + '/package/Android/' + cfg.mode + '/buildList.json'
-      const response = await AppService.getRequest(baseUrl) as { curVersionInfo: { buildEnv: string; buildVersion: string; fileList: Array<{ fileName: string }> } } | null
+      const baseUrl = `${cfg.address}/package/${os}/${cfg.mode}/buildList.json`
+      const response = await AppService.getRequest(baseUrl) as BuildListResponse | null
       if (!response) return
-      // 2. 拼装完整下载地址：{address}/package/Android/{env}/{version}/{fileName}
-      const fullUrl = cfg.address + '/package/Android/' +
-        response.curVersionInfo.buildEnv + '/' + response.curVersionInfo.buildVersion + '/' +
-        response.curVersionInfo.fileList[0].fileName
-      updatePlatformLink('Android', fullUrl)
-    } catch (error) {
-      console.error('在MainHome中捕获到错误:', error)
-    }
-  }
 
-  /**
-   * 从 OSS 获取 Windows 最新版本构建信息
-   * 逻辑同 requestAndroidCfg
-   */
-  const requestWindowsCfg = async () => {
-    if (!configData.value) return
-    try {
-      const cfg = configData.value
-      const baseUrl = cfg.address + '/package/Windows/' + cfg.mode + '/buildList.json'
-      const response = await AppService.getRequest(baseUrl) as { curVersionInfo: { buildEnv: string; buildVersion: string; fileList: Array<{ fileName: string }> } } | null
-      if (!response) return
-      const fullUrl = cfg.address + '/package/Windows/' +
-        response.curVersionInfo.buildEnv + '/' + response.curVersionInfo.buildVersion + '/' +
-        response.curVersionInfo.fileList[0].fileName
-      updatePlatformLink('Windows', fullUrl)
+      const { buildEnv, buildVersion, fileList } = response.curVersionInfo
+      if (!fileList || fileList.length === 0) {
+        console.warn(`${os} 构建列表中无文件`)
+        return
+      }
+      const fullUrl = `${cfg.address}/package/${os}/${buildEnv}/${buildVersion}/${fileList[0].fileName}`
+      updatePlatformLink(os, fullUrl)
     } catch (error) {
-      console.error('在MainHome中捕获到错误:', error)
+      console.error(`${os} 构建信息获取失败:`, error)
     }
   }
 
@@ -119,18 +101,14 @@ export function usePlatforms(
       const device = getDeviceInfo()
       let marketUrl = ''
 
-      // 华为设备 → 华为应用市场
       if (device.brand === 'huawei') {
         marketUrl = 'https://url.cloud.huawei.com/AdWCjYkeLC?shareTo=qrcode'
-      }
-      // 小米设备 → 小米应用商店
-      else if (device.brand === 'xiaomi') {
+      } else if (device.brand === 'xiaomi') {
         marketUrl = 'https://m.malink.cn/s/jU77bi'
       }
 
       if (marketUrl) {
         try {
-          // 尝试打开应用商店
           window.location.href = marketUrl
           // 兜底方案：1.5 秒后如果商店未打开，自动下载 APK
           setTimeout(() => {
@@ -155,8 +133,10 @@ export function usePlatforms(
    * 并发获取 Android 和 Windows 的最新安装包地址
    */
   const fetchPlatformLinks = async () => {
-    await requestAndroidCfg()
-    await requestWindowsCfg()
+    await Promise.all([
+      requestBuildCfg('Android'),
+      requestBuildCfg('Windows'),
+    ])
   }
 
   return { platforms, hoverStates, setHoverState, handleClick, fetchPlatformLinks }

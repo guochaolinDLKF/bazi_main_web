@@ -17,27 +17,28 @@
     <!-- 备案号和版权信息 -->
     <div class="footer-records">
       <span>ICP证：</span>
-      <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;">京ICP备2025146375号-1</a>
-      <span></span>
-      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010502057604" rel="noreferrer" target="_blank">
-        <img class="footer-auth-icon" src="/icons/gongan.png" />
-        <span style="color:#939393;">京公网安备11010502057604号</span>
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-beian-link">京ICP备2025146375号-1</a>
+      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010502057604" rel="noreferrer" target="_blank" class="footer-police-link">
+        <img class="footer-auth-icon" src="/icons/gongan.png" alt="公安备案" />
+        <span>京公网安备11010502057604号</span>
       </a>
-      <span></span>
-      <p>
-        Copyright ©2025-2025 <a href="/" class="red">易德八字</a>. All Right Reserved.
+      <p class="footer-copyright">
+        Copyright ©2025-{{ currentYear }} <a href="/" class="red">易德八字</a>. All Right Reserved.
       </p>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
-// Emits: 点击法律链接时向上通知
+import { computed } from 'vue';
+
+const currentYear = computed(() => new Date().getFullYear());
+
 defineEmits<{
   showPrivacy: []
   showAgreement: []
   showRights: []
-}>()
+}>();
 </script>
 
 <style scoped>
@@ -78,10 +79,23 @@ defineEmits<{
 .footer-records {
   font-size: 10px;
   color: #999;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-.footer-records span {
-  margin: 0 8px;
+/* 备案号和公安链接颜色 */
+.footer-beian-link,
+.footer-police-link span {
+  color: #939393;
+}
+
+/* 公安备案链接：内联图标 */
+.footer-police-link {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* 公安备案图标 */
@@ -90,16 +104,21 @@ defineEmits<{
   margin-right: 4px;
 }
 
+/* 版权信息 */
+.footer-copyright {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.footer-copyright .red {
+  color: #1D953F;
+}
+
 /* 窄屏：备案信息纵向排列 */
 @media (max-width: 600px) {
   .footer-records {
-    display: flex;
     flex-direction: column;
     gap: 5px;
-  }
-
-  .footer-records span {
-    margin: 0;
   }
 }
 </style>

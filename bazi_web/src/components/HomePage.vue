@@ -28,7 +28,6 @@
           src="/icons/product.png"
           alt="易德产品界面展示"
           class="product-image"
-          :style="{ width: '1280px', height: '720px' }"
         />
       </div>
     </div>

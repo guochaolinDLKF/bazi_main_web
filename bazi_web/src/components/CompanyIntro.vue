@@ -18,27 +18,23 @@
 <style scoped>
 /* 绿色背景区域：占视口 1/3 高度 */
 .bottom-green-area {
-  left: 0;
   width: 100%;
   height: 33.33vh;
   background-color: #008000;
-  z-index: 0;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* 简介内容：绝对定位居中，白色文字 */
+/* 简介内容：居中 */
 .company-intro {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 60%;
   max-width: 800px;
   text-align: center;
   color: #ffffff;
   font-size: 16px;
   line-height: 1.8;
-  pointer-events: none; /* 不影响下层交互 */
   padding: 20px 30px;
   border-radius: 10px;
 }

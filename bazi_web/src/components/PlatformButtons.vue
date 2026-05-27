@@ -10,8 +10,8 @@
   <div class="button-container">
     <div class="platform-buttons">
       <div
-        v-for="(platform, index) in platforms"
-        :key="index"
+        v-for="platform in platforms"
+        :key="platform.id"
         class="button"
         @click.stop="onClick(platform, $event)"
         @mouseover="onHover(platform.id, true)"
@@ -65,17 +65,14 @@ defineProps<{
 </script>
 
 <style scoped>
-/* 按钮区域容器 */
+/* 按钮区域容器：负边距使按钮中心对齐下方绿色背景上边缘 */
 .button-container {
   position: relative;
-  top: 50px;
-  left: 0;
-  right: 0;
   z-index: 10;
   display: flex;
   justify-content: center;
-  transform: none;
-  margin-bottom: 0px;
+  margin-top: 50px;
+  margin-bottom: -60px;
   transition: min-height 0.4s ease;
   min-height: 120px;
 }

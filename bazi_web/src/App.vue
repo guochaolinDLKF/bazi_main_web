@@ -92,8 +92,11 @@ const clearAllCache = () => {
 onMounted(async () => {
   clearAllCache()
   await fetchConfig()
-  await saveVisitInfo()
-  await fetchPlatformLinks()
+  // 以下两步互不依赖，并行执行
+  await Promise.all([
+    saveVisitInfo(),
+    fetchPlatformLinks(),
+  ])
 })
 
 // ---- 页脚法律链接处理 ----

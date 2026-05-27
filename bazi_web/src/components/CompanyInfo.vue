@@ -5,13 +5,10 @@
     纯展示型组件
   -->
   <div class="white-rectangle">
-    <!-- 地址和邮箱：同行展示，用分隔符隔开 -->
+    <!-- 地址和邮箱：中间用竖线分隔 -->
     <div class="company-info-row">
       <div class="company-address">地址：北京市朝阳区东三环南路98号1幢14层1707</div>
-      <div class="divider"></div>
-      <div class="divider"></div>
-      <div class="divider"></div>
-      <div class="divider"></div>
+      <span class="divider-text">|</span>
       <div class="company-email">邮箱：ydzzcc@163.com</div>
     </div>
 
@@ -57,7 +54,7 @@
 }
 
 /* 分隔符 */
-.divider {
+.divider-text {
   margin: 0 15px;
   color: #999;
 }
@@ -114,7 +111,7 @@
     width: 100%;
   }
 
-  .divider {
+  .divider-text {
     display: none;
   }
 

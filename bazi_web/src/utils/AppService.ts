@@ -1,4 +1,4 @@
-import { get, HttpError, post } from './HttpUtil.ts';
+import { get, HttpError, post } from './HttpUtil';
 
 /**
  * 应用服务层
@@ -7,43 +7,43 @@ import { get, HttpError, post } from './HttpUtil.ts';
  */
 export class AppService {
 
-    /**
-     * 发起 GET 请求
-     * @param url 完整的请求地址
-     * @returns 响应数据，失败时返回 null
-     */
-    static async getRequest(url: string) {
-        try {
-            const response = await get<{}>(
-                url, null,
-                5000 // 5秒超时
-            );
-            return response.data;
-        } catch (error) {
-            if (error instanceof HttpError) {
-                console.error(`获取数据失败: ${error} - ${error.message}`);
-            }
-            return null;
-        }
+  /**
+   * 发起 GET 请求
+   * @param url 完整的请求地址
+   * @returns 响应数据，失败时返回 null
+   */
+  static async getRequest(url: string) {
+    try {
+      const response = await get<{}>(
+        url, null,
+        5000 // 5秒超时
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof HttpError) {
+        console.error(`获取数据失败: ${error} - ${error.message}`);
+      }
+      return null;
     }
+  }
 
-    /**
-     * 发起 POST 请求
-     * @param url 完整的请求地址
-     * @returns 响应数据，失败时返回 null
-     */
-    static async postRequest(url: string) {
-        try {
-            const response = await post<{}>(
-                url, null,
-                5000 // 5秒超时
-            );
-            return response.data;
-        } catch (error) {
-            if (error instanceof HttpError) {
-                console.error(`获取数据失败: ${error} - ${error.message}`);
-            }
-            return null;
-        }
+  /**
+   * 发起 POST 请求
+   * @param url 完整的请求地址
+   * @returns 响应数据，失败时返回 null
+   */
+  static async postRequest(url: string) {
+    try {
+      const response = await post<{}>(
+        url, {},
+        5000 // 5秒超时
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof HttpError) {
+        console.error(`获取数据失败: ${error} - ${error.message}`);
+      }
+      return null;
     }
+  }
 }
