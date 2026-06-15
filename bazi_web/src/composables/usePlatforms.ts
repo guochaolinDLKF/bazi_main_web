@@ -2,6 +2,7 @@ import { reactive, type Ref } from 'vue'
 import type { ConfigData, Platform, BuildListResponse } from '../types'
 import { AppService } from '../utils/AppService'
 import { getDeviceInfo } from '../utils/device'
+import { logger } from '../utils/logger'
 
 /**
  * 平台下载管理 composable
@@ -53,6 +54,9 @@ export function usePlatforms(
     const platform = platforms.find(p => p.name === platformName)
     if (platform) {
       platform.link = newLink
+      logger.info(`[Platforms] 已更新 ${platformName} 下载地址: ${newLink}`)
+    } else {
+      logger.warn(`[Platforms] 未找到平台 ${platformName}，下载地址更新被忽略`)
     }
   }
 
@@ -61,22 +65,30 @@ export function usePlatforms(
    * @param os 操作系统名称（Android / Windows）
    */
   const requestBuildCfg = async (os: string) => {
-    if (!configData.value) return
+    if (!configData.value) {
+      logger.warn(`[Platforms] 配置未就绪，跳过 ${os} 构建信息获取`)
+      return
+    }
     try {
       const cfg = configData.value
-      const baseUrl = `${cfg.address}/package/${os}/${cfg.mode}/buildList.json`
+      const baseUrl = `${cfg.address}/package/${os}/official/${cfg.mode}/buildList.json`
+      logger.debug(`[Platforms] 获取 ${os} 构建列表: ${baseUrl}`)
       const response = await AppService.getRequest(baseUrl) as BuildListResponse | null
-      if (!response) return
-
-      const { buildEnv, buildVersion, fileList } = response.curVersionInfo
-      if (!fileList || fileList.length === 0) {
-        console.warn(`${os} 构建列表中无文件`)
+      if (!response) {
+        logger.warn(`[Platforms] ${os} 构建列表为空或请求失败`)
         return
       }
-      const fullUrl = `${cfg.address}/package/${os}/${buildEnv}/${buildVersion}/${fileList[0].fileName}`
+
+      const { buildEnv, buildVersion, fileList } = response.curVersionInfo
+      logger.debug(`[Platforms] ${os} 构建信息: env=${buildEnv}, version=${buildVersion}, 文件数=${fileList?.length ?? 0}`)
+      if (!fileList || fileList.length === 0) {
+        logger.warn(`${os} 构建列表中无文件`)
+        return
+      }
+      const fullUrl = `${cfg.address}/package/${os}/official/${buildEnv}/${buildVersion}/${fileList[0].fileName}`
       updatePlatformLink(os, fullUrl)
     } catch (error) {
-      console.error(`${os} 构建信息获取失败:`, error)
+      logger.error(`${os} 构建信息获取失败:`, error)
     }
   }
 
@@ -90,8 +102,10 @@ export function usePlatforms(
    * @param event    原生鼠标事件（用于阻止默认行为）
    */
   const handleClick = (platform: Platform, event: MouseEvent) => {
+    logger.info(`[Platforms] 点击平台按钮: ${platform.name}`)
     // 尚未发布的平台：阻止跳转
     if (['HarmonyOS', 'iOS', 'MacOS'].includes(platform.name)) {
+      logger.debug(`[Platforms] ${platform.name} 尚未发布，阻止跳转`)
       event.preventDefault()
       return
     }
@@ -99,6 +113,7 @@ export function usePlatforms(
     // Android 平台：智能跳转应用商店
     if (platform.name === 'Android') {
       const device = getDeviceInfo()
+      logger.debug(`[Platforms] Android 设备品牌识别结果: ${device.brand}`)
       let marketUrl = ''
 
       if (device.brand === 'huawei') {
@@ -109,14 +124,16 @@ export function usePlatforms(
 
       if (marketUrl) {
         try {
+          logger.debug(`[Platforms] 跳转 ${device.brand} 应用商店: ${marketUrl}`)
           window.location.href = marketUrl
           // 兜底方案：1.5 秒后如果商店未打开，自动下载 APK
           setTimeout(() => {
+            logger.debug('[Platforms] 应用商店兜底：直接下载 APK')
             saveDownInfo(platform.name)
             window.open(platform.link, '_blank')
           }, 1500)
         } catch (e) {
-          console.error('打开应用商店失败:', e)
+          logger.error('打开应用商店失败:', e)
           saveDownInfo(platform.name)
           window.open(platform.link, '_blank')
         }
@@ -125,6 +142,7 @@ export function usePlatforms(
     }
 
     // 其他平台或无品牌识别的 Android：直接下载
+    logger.debug(`[Platforms] 直接下载 ${platform.name}: ${platform.link}`)
     saveDownInfo(platform.name)
     window.open(platform.link, '_blank')
   }
@@ -133,10 +151,12 @@ export function usePlatforms(
    * 并发获取 Android 和 Windows 的最新安装包地址
    */
   const fetchPlatformLinks = async () => {
+    logger.info('[Platforms] 开始并发获取 Android / Windows 下载地址')
     await Promise.all([
       requestBuildCfg('Android'),
       requestBuildCfg('Windows'),
     ])
+    logger.info('[Platforms] 平台下载地址获取流程结束')
   }
 
   return { platforms, hoverStates, setHoverState, handleClick, fetchPlatformLinks }

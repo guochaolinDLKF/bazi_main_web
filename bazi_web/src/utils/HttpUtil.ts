@@ -3,6 +3,7 @@
  * 基于原生 fetch API 封装，支持 GET/POST/PUT/DELETE 方法
  * 包含超时控制（AbortController）和统一的错误处理
  */
+import { logger } from './logger';
 
 /** 统一响应数据结构 */
 export interface ApiResponse<T = any> {
@@ -41,6 +42,9 @@ export async function httpRequest<T = any>(
     // 创建 AbortController 用于超时控制
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
+    const startTime = Date.now();
+
+    logger.debug(`[Http] → ${method} ${url} (timeout=${timeout}ms)`, data ?? '');
 
     try {
         const config: RequestInit = {
@@ -69,17 +73,21 @@ export async function httpRequest<T = any>(
 
         const response = await fetch(url, config);
         clearTimeout(timeoutId);
+        const cost = Date.now() - startTime;
 
         // 非 2xx 状态码视为错误
         if (!response.ok) {
+            logger.warn(`[Http] ← ${method} ${url} 失败，状态码 ${response.status}（耗时 ${cost}ms）`);
             throw new HttpError(response.status, `HTTP错误! 状态码: ${response.status}`);
         }
 
         const responseData = await response.json();
+        logger.debug(`[Http] ← ${method} ${url} 成功，状态码 ${response.status}（耗时 ${cost}ms）`);
         return { status: response.status, data: responseData };
 
     } catch (error) {
         clearTimeout(timeoutId);
+        const cost = Date.now() - startTime;
 
         // 已是 HttpError 直接抛出
         if (error instanceof HttpError) {
@@ -88,6 +96,7 @@ export async function httpRequest<T = any>(
 
         // AbortController 超时触发的错误
         if (error instanceof DOMException && error.name === 'AbortError') {
+            logger.warn(`[Http] ✗ ${method} ${url} 请求超时（${timeout}ms，实际耗时 ${cost}ms）`);
             throw new HttpError(408, `请求超时: ${timeout}ms`);
         }
 
@@ -96,6 +105,7 @@ export async function httpRequest<T = any>(
         const message = (error instanceof Error)
             ? `网络错误: ${error.message}`
             : `未知网络错误`;
+        logger.warn(`[Http] ✗ ${method} ${url} ${message}（耗时 ${cost}ms）`);
         throw new HttpError(status, message);
     }
 }

@@ -51,6 +51,7 @@ import { useConfig } from './composables/useConfig'
 import { useLanguage } from './composables/useLanguage'
 import { useAnalytics } from './composables/useAnalytics'
 import { usePlatforms } from './composables/usePlatforms'
+import { logger } from './utils/logger'
 
 /** 当前显示的页面：'home' 或 'mac' */
 const currentPage = ref('home')
@@ -77,8 +78,9 @@ const clearAllCache = () => {
   try {
     localStorage.clear()
     sessionStorage.clear()
+    logger.debug('[App] 已清除 localStorage / sessionStorage 缓存')
   } catch (error) {
-    console.error('清除缓存时出错:', error)
+    logger.error('清除缓存时出错:', error)
   }
 }
 
@@ -90,26 +92,32 @@ const clearAllCache = () => {
  * 4. 拉取各平台最新安装包地址
  */
 onMounted(async () => {
+  logger.info('[App] 应用初始化开始')
   clearAllCache()
   await fetchConfig()
   // 以下两步互不依赖，并行执行
+  logger.debug('[App] 并行执行：上报访问 + 拉取平台下载地址')
   await Promise.all([
     saveVisitInfo(),
     fetchPlatformLinks(),
   ])
+  logger.info('[App] 应用初始化完成')
 })
 
 // ---- 页脚法律链接处理 ----
 
 const showPrivacyPolicy = () => {
+  logger.debug('[App] 打开隐私政策页面')
   window.open('/about/privacy.html')
 }
 
 const showServiceAgreement = () => {
+  logger.debug('[App] 打开服务协议页面')
   window.open('/about/agreement.html')
 }
 
 const showRightsStatement = () => {
+  logger.debug('[App] 打开权益声明页面')
   window.open('/about/law.html')
 }
 </script>

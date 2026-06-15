@@ -1,6 +1,7 @@
 import type { Ref } from 'vue'
 import type { ConfigData } from '../types'
 import { AppService } from '../utils/AppService'
+import { logger } from '../utils/logger'
 
 /**
  * 数据统计 composable
@@ -16,11 +17,17 @@ export function useAnalytics(configData: Ref<ConfigData | null>) {
    * POST {optionUrl}/game/visit_page
    */
   const saveVisitInfo = async () => {
-    if (!configData.value) return
+    if (!configData.value) {
+      logger.warn('[Analytics] 配置未就绪，跳过页面访问上报')
+      return
+    }
     const url = configData.value.optionUrl + '/game/visit_page'
+    logger.debug(`[Analytics] 上报页面访问: ${url}`)
     const result = await AppService.postRequest(url)
     if (result === null) {
-      console.warn('[Analytics] 页面访问上报失败')
+      logger.warn('[Analytics] 页面访问上报失败')
+    } else {
+      logger.info('[Analytics] 页面访问上报成功')
     }
   }
 
@@ -31,11 +38,17 @@ export function useAnalytics(configData: Ref<ConfigData | null>) {
    * @param platform 下载平台名称（如 "Android"、"Windows"）
    */
   const saveDownInfo = async (platform: string) => {
-    if (!configData.value) return
+    if (!configData.value) {
+      logger.warn(`[Analytics] 配置未就绪，跳过下载上报 (${platform})`)
+      return
+    }
     const url = configData.value.optionUrl + '/game/down_info?downPlatform=' + encodeURIComponent(platform)
+    logger.debug(`[Analytics] 上报下载行为 (${platform}): ${url}`)
     const result = await AppService.postRequest(url)
     if (result === null) {
-      console.warn(`[Analytics] 下载上报失败 (${platform})`)
+      logger.warn(`[Analytics] 下载上报失败 (${platform})`)
+    } else {
+      logger.info(`[Analytics] 下载上报成功 (${platform})`)
     }
   }
 

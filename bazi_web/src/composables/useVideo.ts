@@ -1,4 +1,5 @@
 import { ref, onBeforeUnmount } from 'vue'
+import { logger } from '../utils/logger'
 
 /**
  * 视频播放器 composable（当前模板中已注释，保留以备后续使用）
@@ -73,7 +74,7 @@ export function useVideo() {
               videoPlayer.value!.play().then(() => {
                 isPlaying.value = true
               }).catch(error => {
-                console.log('自动播放被阻止:', error)
+                logger.log('自动播放被阻止:', error)
                 // 浏览器可能阻止自动播放，重试一次
                 videoPlayer.value!.play()
                 videoPlayer.value!.muted = false

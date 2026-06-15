@@ -1,4 +1,5 @@
 import type { DeviceInfo } from '../types'
+import { logger } from './logger'
 
 /**
  * 获取当前设备信息
@@ -8,7 +9,7 @@ import type { DeviceInfo } from '../types'
 export function getDeviceInfo(): DeviceInfo {
   const ua = navigator.userAgent || ""
 
-  return {
+  const info: DeviceInfo = {
     userAgent: ua,
     // 匹配 Android 设备
     isAndroid: /Android/i.test(ua),
@@ -25,4 +26,7 @@ export function getDeviceInfo(): DeviceInfo {
       /Samsung/i.test(ua) ? "samsung" :
       "unknown"
   }
+
+  logger.debug(`[Device] 设备识别: android=${info.isAndroid}, ios=${info.isIOS}, mobile=${info.isMobile}, brand=${info.brand}`)
+  return info
 }

@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { convertDOM } from '../zhConverter'
+import { logger } from '../utils/logger'
 
 /**
  * 语言切换 composable
@@ -19,6 +20,7 @@ export function useLanguage() {
    * @param lang 目标语言
    */
   const setActiveLang = (lang: 'simplified' | 'traditional') => {
+    logger.info(`[Language] 切换语言: ${activeLang.value} → ${lang}`)
     activeLang.value = lang
     // 调用 zhConverter 全局转换函数，true 表示转为繁体
     convertDOM(lang === 'traditional')
@@ -30,6 +32,7 @@ export function useLanguage() {
    */
   const initLanguage = () => {
     if (activeLang.value === 'traditional') {
+      logger.debug('[Language] 初始化为繁体，执行 DOM 转换')
       convertDOM(true)
     }
   }
