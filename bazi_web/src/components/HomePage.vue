@@ -9,7 +9,7 @@
       <!-- 产品主标题 -->
       <div class="main-title">易德八字</div>
 
-      <!-- 产品功能描述 -->
+      <!-- 产品功能描述
       <div class="product-description">
         <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
         <h3 class="description-title1">七大功能</h3>
@@ -21,8 +21,8 @@
         <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
         <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
       </div>
-
-      <!-- 产品界面截图 -->
+      -->
+      <!-- 产品界面截图-->
       <div class="product-image-container">
         <img
           src="/icons/product.png"
