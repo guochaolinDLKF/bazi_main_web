@@ -9,7 +9,6 @@
       <!-- 产品主标题 -->
       <div class="main-title">易德八字</div>
 
-      <!-- 产品功能描述
       <div class="product-description">
         <h3 class="description-title">易德——专业级八字排盘软件，让古老智慧，在指尖重生</h3>
         <h3 class="description-title1">七大功能</h3>
@@ -20,15 +19,6 @@
         <p>5. 集成权威命理古籍原文，边排盘边参详</p>
         <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
         <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
-      </div>
-      -->
-      <!-- 产品界面截图-->
-      <div class="product-image-container">
-        <img
-          src="/icons/product.png"
-          alt="易德产品界面展示"
-          class="product-image"
-        />
       </div>
     </div>
 
@@ -133,25 +123,6 @@ defineProps<{
   padding-bottom: 8px;
 }
 
-/* 产品截图容器 */
-.product-image-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 100px;
-}
-
-/* 产品截图 */
-.product-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  object-fit: contain;
-}
-
 /* === 多级响应式适配 === */
 
 @media (max-width: 1000px) {
@@ -162,7 +133,6 @@ defineProps<{
 }
 
 @media (max-width: 900px) {
-  .product-image { max-width: 90%; }
   .main-title {
     margin-top: 100px;
     margin-bottom: 50px;
@@ -201,9 +171,6 @@ defineProps<{
     margin-bottom: 30px;
     font-size: 32px;
   }
-  .product-image-container {
-    margin-bottom: 40px;
-  }
 }
 
 @media (max-width: 400px) {
@@ -220,9 +187,6 @@ defineProps<{
   }
   .product-description p {
     font-size: 13px;
-  }
-  .product-image-container {
-    margin-bottom: 30px;
   }
 }
 </style>
