@@ -1,7 +1,6 @@
 import { reactive, type Ref } from 'vue'
 import type { ConfigData, Platform, BuildListResponse } from '../types'
 import { AppService } from '../utils/AppService'
-import { getDeviceInfo } from '../utils/device'
 import { logger } from '../utils/logger'
 
 /**
@@ -22,11 +21,11 @@ export function usePlatforms(
 ) {
   /** 平台按钮列表，link 为兜底地址，启动后会被远端真实地址覆盖 */
   const platforms = reactive<Platform[]>([
-    { name: 'Android', id: 'android', icon: '/icons/android.png', link: 'https://default-android.com' },
-    { name: 'Windows', id: 'windows', icon: '/icons/windows.png', link: 'https://default-windows.com' },
-    { name: 'HarmonyOS', id: 'harmony', icon: '/icons/harmonyos.png', link: 'https://default-harmonyos.com' },
-    { name: 'iOS', id: 'ios', icon: '/icons/ios.png', link: 'https://default-ios.com' },
-    { name: 'MacOS', id: 'mac', icon: '/icons/macos.png', link: 'https://default-macos.com' },
+    { name: 'Android', id: 'android', icon: '/icons/android.png', link: window.location.href },
+    { name: 'Windows', id: 'windows', icon: '/icons/windows.png', link: window.location.href },
+    { name: 'HarmonyOS', id: 'harmony', icon: '/icons/harmonyos.png', link: window.location.href },
+    { name: 'iOS', id: 'ios', icon: '/icons/ios.png', link: window.location.href },
+    { name: 'MacOS', id: 'mac', icon: '/icons/macos.png', link: window.location.href },
   ])
 
   /** 悬停状态映射，用于显示"正在研发中"提示（仅 iOS/HarmonyOS/MacOS） */
@@ -110,38 +109,7 @@ export function usePlatforms(
       return
     }
 
-    // Android 平台：智能跳转应用商店
-    if (platform.name === 'Android') {
-      const device = getDeviceInfo()
-      logger.debug(`[Platforms] Android 设备品牌识别结果: ${device.brand}`)
-      let marketUrl = ''
-
-      if (device.brand === 'huawei') {
-        marketUrl = 'https://url.cloud.huawei.com/AdWCjYkeLC?shareTo=qrcode'
-      } else if (device.brand === 'xiaomi') {
-        marketUrl = 'https://m.malink.cn/s/jU77bi'
-      }
-
-      if (marketUrl) {
-        try {
-          logger.debug(`[Platforms] 跳转 ${device.brand} 应用商店: ${marketUrl}`)
-          window.location.href = marketUrl
-          // 兜底方案：1.5 秒后如果商店未打开，自动下载 APK
-          setTimeout(() => {
-            logger.debug('[Platforms] 应用商店兜底：直接下载 APK')
-            saveDownInfo(platform.name)
-            window.open(platform.link, '_blank')
-          }, 1500)
-        } catch (e) {
-          logger.error('打开应用商店失败:', e)
-          saveDownInfo(platform.name)
-          window.open(platform.link, '_blank')
-        }
-        return
-      }
-    }
-
-    // 其他平台或无品牌识别的 Android：直接下载
+    // 所有平台（含 Android）：直接下载拼接的 URL
     logger.debug(`[Platforms] 直接下载 ${platform.name}: ${platform.link}`)
     saveDownInfo(platform.name)
     window.open(platform.link, '_blank')
