@@ -20,6 +20,15 @@
         <p>6. 支持流日、流时动态查看，精细追踪运势波动</p>
         <p>7. 创新涂鸦黑板模式，释放思维推演空间</p>
       </div>
+
+      <!-- 产品界面截图 -->
+      <div class="product-image-container">
+        <img src="/icons/product1.png" alt="易德产品界面展示" class="product-image" />
+        <img src="/icons/product2.png" alt="易德产品界面展示" class="product-image" />
+        <img src="/icons/product3.png" alt="易德产品界面展示" class="product-image" />
+        <img src="/icons/product4.png" alt="易德产品界面展示" class="product-image" />
+        <img src="/icons/product5.png" alt="易德产品界面展示" class="product-image" />
+      </div>
     </div>
 
     <!-- 平台下载按钮组 -->
@@ -121,6 +130,24 @@ defineProps<{
   color: #26B74F;
   margin-bottom: 15px;
   padding-bottom: 8px;
+}
+
+/* 产品截图：三图并排等宽对齐 */
+.product-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 40px auto 100px;
+  padding: 0 20px;
+}
+.product-image {
+  flex: 1;
+  min-width: 0;
+  max-width: 320px;
+  height: auto;
+  border-radius: 8px;
 }
 
 /* === 多级响应式适配 === */
